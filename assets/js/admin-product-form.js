@@ -15,6 +15,7 @@ const productForm = document.getElementById('product-form');
 if (productForm) {
     productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        console.log("Form submission started"); // Debug log
 
         const btn = e.target.querySelector('button[type="submit"]');
         const originalText = btn.innerText;
@@ -23,6 +24,7 @@ if (productForm) {
 
         try {
             // 1. Get Form Values
+            console.log("Collecting form data..."); // Debug log
             const title = document.getElementById('title').value;
             const category = document.getElementById('category').value;
             const price = parseFloat(document.getElementById('price').value) || 0;
@@ -36,13 +38,30 @@ if (productForm) {
 
             // 2. Upload Image if selected
             if (imageFile) {
-                const storageRef = ref(storage, `products/${Date.now()}_${imageFile.name}`);
-                const snapshot = await uploadBytes(storageRef, imageFile);
-                imageUrl = await getDownloadURL(snapshot.ref);
+                console.log("Image selected:", imageFile.name); // Debug log
+                // Sanitize filename to avoid issues with special characters
+                const sanitizedName = imageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                const storagePath = `products/${Date.now()}_${sanitizedName}`;
+                console.log("Uploading to:", storagePath); // Debug log
+
+                const storageRef = ref(storage, storagePath);
+                
+                try {
+                    const snapshot = await uploadBytes(storageRef, imageFile);
+                    console.log("Upload success, snapshot:", snapshot); // Debug log
+                    imageUrl = await getDownloadURL(snapshot.ref);
+                    console.log("Image URL:", imageUrl); // Debug log
+                } catch (uploadError) {
+                    console.error("Storage Error:", uploadError);
+                    throw new Error("Failed to upload image. Permission denied or storage quota exceeded? " + uploadError.code);
+                }
+            } else {
+                console.log("No image selected"); // Debug log
             }
 
             // 3. Save to Firestore
-            await addDoc(collection(db, "products"), {
+            console.log("Saving to Firestore..."); // Debug log
+            const productData = {
                 title,
                 category,
                 price,
@@ -51,14 +70,24 @@ if (productForm) {
                 visible,
                 imageUrl,
                 timestamp: serverTimestamp()
-            });
+            };
+            console.log("Data to save:", productData); // Debug log
+
+            try {
+                await addDoc(collection(db, "products"), productData);
+                console.log("Firestore save success"); // Debug log
+            } catch (dbError) {
+                console.error("Firestore Error:", dbError);
+                throw new Error("Failed to save database record. " + dbError.code);
+            }
 
             alert('Product saved successfully!');
             window.location.href = 'products.html';
 
         } catch (error) {
-            console.error("Error saving product:", error);
+            console.error("FINAL ERROR:", error);
             alert("Error saving product: " + error.message);
+        } finally {
             btn.innerText = originalText;
             btn.disabled = false;
         }
