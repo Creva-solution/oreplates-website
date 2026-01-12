@@ -4,13 +4,13 @@ import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAYsqtX9SFgpb8izPhA-DZEqz9TO-uhUsU",
-    authDomain: "ore-plates.firebaseapp.com",
-    projectId: "ore-plates",
-    storageBucket: "ore-plates.firebasestorage.app",
-    messagingSenderId: "797510364696",
-    appId: "1:797510364696:web:dcfc169b3d25041fc69d6d",
-    measurementId: "G-KP49Z3PYPM"
+  apiKey: "AIzaSyCuYDoCKBrmPi9hRwdNsXyvTylL5AuohTo",
+  authDomain: "oreplates-98e68.firebaseapp.com",
+  projectId: "oreplates-98e68",
+  storageBucket: "oreplates-98e68.firebasestorage.app",
+  messagingSenderId: "614773442296",
+  appId: "1:614773442296:web:4cdeeac1d10d9966949d0d",
+  measurementId: "G-DHW15GF2B7"
 };
 
 // Initialize Firebase
