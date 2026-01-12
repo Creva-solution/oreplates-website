@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gallery | ORE Plates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6ee619",
+                        "secondary": "#5c4033",
+                        "background-light": "#f9fafb",
+                        "background-dark": "#182111",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+        }
+
+        /* Lightbox transitions */
+        #lightbox {
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.active {
+            display: flex !important;
+            opacity: 1;
+        }
+
+        #lightbox:not(.active) {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+    </style>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+
+<body class="bg-background-light text-gray-900 antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+        <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 max-w-7xl mx-auto">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="assets/images/logo.png" alt="ORE Plates" class="h-12 w-auto">
+            </a>
+
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-8 text-[15px] font-medium text-gray-600">
+                    <a class="hover:text-[#6ee619] transition-colors" href="index.html" data-i18n="nav_home">Home</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="products.html"
+                        data-i18n="nav_products">Products</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="about.html" data-i18n="nav_about">About</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="why-ore.html" data-i18n="nav_why">Why
+                        ORE?</a>
+                    <a class="text-[#6ee619] font-bold" href="gallery.html" data-i18n="nav_gallery">Gallery</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="contact.html"
+                        data-i18n="nav_contact">Contact</a>
+                    <a href="bulk-export.html"
+                        class="bg-[#6ee619] text-white px-5 py-2 rounded-full font-bold hover:bg-[#5cd600] transition-colors shadow-md shadow-green-200"
+                        data-i18n="btn_bulk">Bulk Order</a>
+                </div>
+
+                <div
+                    class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold tracking-wide">
+                    <span id="lang-en" class="cursor-pointer hover:text-[#6ee619] transition-colors">EN</span>
+                    <span class="text-gray-300">|</span>
+                    <span id="lang-ta" class="cursor-pointer hover:text-[#6ee619] transition-colors">TA</span>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white">
+            <div class="flex flex-col p-4 space-y-4 font-medium text-gray-600">
+                <a href="index.html" class="hover:text-[#6ee619]" data-i18n="nav_home">Home</a>
+                <a href="products.html" class="hover:text-[#6ee619]" data-i18n="nav_products">Products</a>
+                <a href="about.html" class="hover:text-[#6ee619]" data-i18n="nav_about">About</a>
+                <a href="why-ore.html" class="hover:text-[#6ee619]" data-i18n="nav_why">Why ORE?</a>
+                <a href="gallery.html" class="hover:text-[#6ee619]" data-i18n="nav_gallery">Gallery</a>
+                <a href="contact.html" class="hover:text-[#6ee619]" data-i18n="nav_contact">Contact</a>
+                <a href="bulk-export.html" class="text-[#6ee619] font-bold" data-i18n="btn_bulk">Bulk Order</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-[#182111] py-16 text-center text-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-4" data-i18n="nav_gallery">Gallery</h1>
+            <p class="text-gray-400 max-w-2xl mx-auto">A glimpse into our sustainable manufacturing process and finished
+                products.</p>
+        </div>
+    </header>
+
+    <!-- Gallery Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+            <!-- Gallery Item 1 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/onboarding-nature.png" alt="Nature"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+            <!-- Gallery Item 2 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/onboarding-process.png" alt="Process"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+            <!-- Gallery Item 3 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/hero-bg.png" alt="Factory"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+            <!-- Gallery Item 4 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/onboarding-factory.png" alt="Products"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+            <!-- Gallery Item 5 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/ore_round_plate_1768157203971.png" alt="Round Plates"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+            <!-- Gallery Item 6 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/ore_square_plate_1768157234503.png" alt="Square Plates"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+            <!-- Gallery Item 7 -->
+            <div
+                class="gallery-item group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
+                <img src="assets/images/onboarding-supply.png" alt="Sorting"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors"></div>
+                <div
+                    class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-white text-4xl drop-shadow-lg">zoom_in</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-[60] bg-black/90 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <button id="lightbox-close" class="absolute top-6 right-6 text-white hover:text-[#6ee619] transition-colors">
+            <span class="material-symbols-outlined text-4xl">close</span>
+        </button>
+        <img id="lightbox-img" src="" alt="Full View" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-[#1a1a1a] text-white pt-16 pb-8 border-t-4 border-[#6ee619]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div>
+                <div class="mb-4">
+                    <img src="assets/images/logo.png" alt="ORE Plates" class="h-16 w-auto">
+                </div>
+                <p class="text-gray-400 leading-relaxed text-sm" data-i18n="p_footer_desc">
+                    Our Responsible Earth. Manufacturing high-quality, eco-friendly areca leaf plates since 2024.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-4 text-[#6ee619]" data-i18n="h4_quicklinks">Quick Links</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="products.html" class="hover:text-white transition-colors"
+                            data-i18n="nav_products">Products</a></li>
+                    <li><a href="about.html" class="hover:text-white transition-colors" data-i18n="nav_about">About
+                            Us</a></li>
+                    <li><a href="bulk-export.html" class="hover:text-white transition-colors" data-i18n="btn_bulk">Bulk
+                            Order</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-4 text-[#6ee619]" data-i18n="h4_contact">Contact</h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">location_on</span> Kallakurichi, Tamil Nadu
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">phone</span> <a href="tel:+917639754311"
+                            class="hover:text-white transition-colors">+91 76397 54311</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">mail</span> oreplates@gmail.com
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-500"
+            data-i18n="p_rights">
+            &copy; 2026 ORE Plates. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

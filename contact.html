@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Contact Us | ORE Plates</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6ee619",
+                        "secondary": "#5c4033",
+                        "background-light": "#f9fafb",
+                        "background-dark": "#182111",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+
+<body class="bg-background-light text-gray-900 antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+        <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 max-w-7xl mx-auto">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="assets/images/logo.png" alt="ORE Plates" class="h-12 w-auto">
+            </a>
+
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-8 text-[15px] font-medium text-gray-600">
+                    <a class="hover:text-[#6ee619] transition-colors" href="index.html" data-i18n="nav_home">Home</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="products.html"
+                        data-i18n="nav_products">Products</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="about.html" data-i18n="nav_about">About</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="why-ore.html" data-i18n="nav_why">Why
+                        ORE?</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="gallery.html"
+                        data-i18n="nav_gallery">Gallery</a>
+                    <a class="text-[#6ee619] font-bold" href="contact.html" data-i18n="nav_contact">Contact</a>
+                    <a href="bulk-export.html"
+                        class="bg-[#6ee619] text-white px-5 py-2 rounded-full font-bold hover:bg-[#5cd600] transition-colors shadow-md shadow-green-200"
+                        data-i18n="btn_bulk">Bulk Order</a>
+                </div>
+
+                <div
+                    class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold tracking-wide">
+                    <span id="lang-en" class="cursor-pointer hover:text-[#6ee619] transition-colors">EN</span>
+                    <span class="text-gray-300">|</span>
+                    <span id="lang-ta" class="cursor-pointer hover:text-[#6ee619] transition-colors">TA</span>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white">
+            <div class="flex flex-col p-4 space-y-4 font-medium text-gray-600">
+                <a href="index.html" class="hover:text-[#6ee619]" data-i18n="nav_home">Home</a>
+                <a href="products.html" class="hover:text-[#6ee619]" data-i18n="nav_products">Products</a>
+                <a href="about.html" class="hover:text-[#6ee619]" data-i18n="nav_about">About</a>
+                <a href="why-ore.html" class="hover:text-[#6ee619]" data-i18n="nav_why">Why ORE?</a>
+                <a href="gallery.html" class="hover:text-[#6ee619]" data-i18n="nav_gallery">Gallery</a>
+                <a href="contact.html" class="hover:text-[#6ee619]" data-i18n="nav_contact">Contact</a>
+                <a href="bulk-export.html" class="text-[#6ee619] font-bold" data-i18n="btn_bulk">Bulk Order</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900" data-i18n="h4_contact">Get in Touch</h1>
+            <p class="text-lg text-gray-500 max-w-2xl mx-auto">
+                Interested in our products? Fill out the form below or contact us directly. We supply across Tamil Nadu
+                and for export.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+
+            <!-- Contact Form -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl shadow-gray-100 border border-gray-100">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-[#6ee619]">mail</span> Send us a message
+                </h2>
+                <form id="contactForm" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name <span
+                                class="text-red-500">*</span></label>
+                        <input type="text" id="name" required
+                            class="w-full rounded-xl border-gray-300 focus:border-[#6ee619] focus:ring-[#6ee619] shadow-sm py-3"
+                            placeholder="Your Name" data-i18n="ph_name">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email <span
+                                class="text-red-500">*</span></label>
+                        <input type="email" id="email" required
+                            class="w-full rounded-xl border-gray-300 focus:border-[#6ee619] focus:ring-[#6ee619] shadow-sm py-3"
+                            placeholder="Your Email" data-i18n="ph_email">
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone <span
+                                class="text-red-500">*</span></label>
+                        <input type="tel" id="phone" required
+                            class="w-full rounded-xl border-gray-300 focus:border-[#6ee619] focus:ring-[#6ee619] shadow-sm py-3"
+                            placeholder="Your Phone Number" data-i18n="ph_phone">
+                    </div>
+                    <div>
+                        <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                        <input type="text" id="location"
+                            class="w-full rounded-xl border-gray-300 focus:border-[#6ee619] focus:ring-[#6ee619] shadow-sm py-3"
+                            placeholder="Your Location" data-i18n="ph_location">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                        <textarea id="message" rows="4" required
+                            class="w-full rounded-xl border-gray-300 focus:border-[#6ee619] focus:ring-[#6ee619] shadow-sm py-3"
+                            placeholder="Message / Products Required" data-i18n="ph_message"></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-[#6ee619] text-white font-bold py-4 rounded-xl shadow-lg hover:bg-[#5cd600] transform active:scale-95 transition-all"
+                        data-i18n="btn_submit">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="space-y-8">
+                <!-- Info Cards -->
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <div class="bg-white p-3 rounded-full shadow-sm text-[#6ee619]">
+                        <span class="material-symbols-outlined">factory</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Factory Location</h3>
+                        <p class="text-gray-600 leading-relaxed">Global Nagar, Kallakurichi,<br>Tamil Nadu - 606202</p>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <div class="bg-white p-3 rounded-full shadow-sm text-[#6ee619]">
+                        <span class="material-symbols-outlined">call</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Phone / WhatsApp</h3>
+                        <p class="text-gray-600 mb-2">+91 76397 54311</p>
+                        <a href="https://wa.me/917639754311" target="_blank"
+                            class="text-[#6ee619] font-bold text-sm hover:underline flex items-center gap-1">
+                            Chat on WhatsApp <span class="material-symbols-outlined text-sm">open_in_new</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100 flex items-start gap-4">
+                    <div class="bg-white p-3 rounded-full shadow-sm text-[#6ee619]">
+                        <span class="material-symbols-outlined">mail</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-lg mb-1">Email</h3>
+                        <p class="text-gray-600">oreplates@gmail.com</p>
+                    </div>
+                </div>
+
+                <!-- Google Map Embed -->
+                <div class="h-80 bg-gray-200 rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+                    <iframe src="https://maps.google.com/maps?cid=16763869266704648577&output=embed" width="100%"
+                        height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#1a1a1a] text-white pt-16 pb-8 border-t-4 border-[#6ee619]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div>
+                <div class="mb-4">
+                    <img src="assets/images/logo.png" alt="ORE Plates" class="h-16 w-auto">
+                </div>
+                <p class="text-gray-400 leading-relaxed text-sm" data-i18n="p_footer_desc">
+                    Our Responsible Earth. Manufacturing high-quality, eco-friendly areca leaf plates since 2024.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-4 text-[#6ee619]" data-i18n="h4_quicklinks">Quick Links</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="products.html" class="hover:text-white transition-colors"
+                            data-i18n="nav_products">Products</a></li>
+                    <li><a href="about.html" class="hover:text-white transition-colors" data-i18n="nav_about">About
+                            Us</a></li>
+                    <li><a href="bulk-export.html" class="hover:text-white transition-colors" data-i18n="btn_bulk">Bulk
+                            Order</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-4 text-[#6ee619]" data-i18n="h4_contact">Contact</h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">location_on</span> Kallakurichi, Tamil Nadu
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">phone</span> <a href="tel:+917639754311"
+                            class="hover:text-white transition-colors">+91 76397 54311</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">mail</span> oreplates@gmail.com
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-500"
+            data-i18n="p_rights">
+            &copy; 2026 ORE Plates. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/contact-service.js"></script>
+</body>
+
+</html>

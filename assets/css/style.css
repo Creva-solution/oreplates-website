@@ -1,0 +1,238 @@
+/* ORE Plates - Brand Styles */
+
+:root {
+    /* Color Palette */
+    --color-leaf-green: #3D6E3D;
+    --color-earth-brown: #6A4129;
+    --color-dark-coffee: #3E2A21;
+    --color-areca-beige: #D9B78F;
+    --color-white: #FFFFFF;
+    --color-off-white: #f9f9f9;
+    --color-text-main: #3E2A21;
+    --color-text-light: #666;
+
+    /* Typography */
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing & Layout */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 8rem;
+
+    --container-width: 1200px;
+    --border-radius: 12px;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+/* Reset & Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    color: var(--color-text-main);
+    background-color: var(--color-off-white);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--color-earth-brown);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+/* Utility Classes */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 32px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    font-family: var(--font-heading);
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--color-leaf-green);
+    color: var(--color-white);
+}
+
+.btn-primary:hover {
+    background-color: #2e542e;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 2px solid var(--color-leaf-green);
+    color: var(--color-leaf-green);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-leaf-green);
+    color: var(--color-white);
+}
+
+.section {
+    padding: var(--spacing-lg) 0;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-1 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-2 {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Language Selector */
+.lang-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    margin-left: 2rem;
+    color: var(--color-dark-coffee);
+}
+
+.lang-btn {
+    cursor: pointer;
+    font-weight: normal;
+    transition: var(--transition);
+}
+
+.lang-btn:hover {
+    color: var(--color-leaf-green);
+}
+
+.lang-divider {
+    opacity: 0.5;
+}
+
+/* Components: Navbar */
+.navbar {
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-leaf-green);
+    font-family: var(--font-heading);
+    letter-spacing: -1px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    font-weight: 500;
+    color: var(--color-dark-coffee);
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: var(--color-leaf-green);
+}
+
+/* Pages specific */
+.hero {
+    position: relative;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url('../images/hero-bg.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.footer {
+    background-color: var(--color-dark-coffee);
+    color: var(--color-areca-beige);
+    padding: var(--spacing-lg) 0 2rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer h4 {
+    color: var(--color-white);
+    margin-bottom: 1rem;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}

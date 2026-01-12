@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Why ORE? | ORE Plates</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6ee619",
+                        "secondary": "#5c4033",
+                        "background-light": "#f9fafb",
+                        "background-dark": "#182111",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+        }
+    </style>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
+</head>
+
+<body class="bg-background-light text-gray-900 antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-100">
+        <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 max-w-7xl mx-auto">
+            <a href="index.html" class="flex items-center gap-2 group">
+                <img src="assets/images/logo.png" alt="ORE Plates" class="h-12 w-auto">
+            </a>
+
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex items-center gap-8 text-[15px] font-medium text-gray-600">
+                    <a class="hover:text-[#6ee619] transition-colors" href="index.html" data-i18n="nav_home">Home</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="products.html"
+                        data-i18n="nav_products">Products</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="about.html" data-i18n="nav_about">About</a>
+                    <a class="text-[#6ee619] font-bold" href="why-ore.html" data-i18n="nav_why">Why ORE?</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="gallery.html"
+                        data-i18n="nav_gallery">Gallery</a>
+                    <a class="hover:text-[#6ee619] transition-colors" href="contact.html"
+                        data-i18n="nav_contact">Contact</a>
+                    <a href="bulk-export.html"
+                        class="bg-[#6ee619] text-white px-5 py-2 rounded-full font-bold hover:bg-[#5cd600] transition-colors shadow-md shadow-green-200"
+                        data-i18n="btn_bulk">Bulk Order</a>
+                </div>
+
+                <div
+                    class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 text-xs font-bold tracking-wide">
+                    <span id="lang-en" class="cursor-pointer hover:text-[#6ee619] transition-colors">EN</span>
+                    <span class="text-gray-300">|</span>
+                    <span id="lang-ta" class="cursor-pointer hover:text-[#6ee619] transition-colors">TA</span>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white">
+            <div class="flex flex-col p-4 space-y-4 font-medium text-gray-600">
+                <a href="index.html" class="hover:text-[#6ee619]" data-i18n="nav_home">Home</a>
+                <a href="products.html" class="hover:text-[#6ee619]" data-i18n="nav_products">Products</a>
+                <a href="about.html" class="hover:text-[#6ee619]" data-i18n="nav_about">About</a>
+                <a href="why-ore.html" class="hover:text-[#6ee619]" data-i18n="nav_why">Why ORE?</a>
+                <a href="gallery.html" class="hover:text-[#6ee619]" data-i18n="nav_gallery">Gallery</a>
+                <a href="contact.html" class="hover:text-[#6ee619]" data-i18n="nav_contact">Contact</a>
+                <a href="bulk-export.html" class="text-[#6ee619] font-bold" data-i18n="btn_bulk">Bulk Order</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-[#182111] py-16 text-center text-white">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-4" data-i18n="nav_why">Why Choose ORE?</h1>
+            <p class="text-gray-400 max-w-2xl mx-auto">The smart, sustainable choice for a greener future.</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+        <!-- Benefits Grid -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold text-center mb-12">The Power of Areca Leaves</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <div
+                    class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center hover:-translate-y-1 transition-transform duration-300">
+                    <div
+                        class="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#6ee619]">
+                        <span class="material-symbols-outlined text-3xl">compost</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">100% Biodegradable</h3>
+                    <p class="text-gray-600 leading-relaxed">Decomposes naturally within 60 days, enriching the soil
+                        instead of polluting it.</p>
+                </div>
+
+                <div
+                    class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center hover:-translate-y-1 transition-transform duration-300">
+                    <div
+                        class="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#6ee619]">
+                        <span class="material-symbols-outlined text-3xl">no_meals</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Chemical Free</h3>
+                    <p class="text-gray-600 leading-relaxed">No wax, glues, or dyes. Just pure areca leaf cleansed with
+                        water and heat.</p>
+                </div>
+
+                <div
+                    class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 text-center hover:-translate-y-1 transition-transform duration-300">
+                    <div
+                        class="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 text-[#6ee619]">
+                        <span class="material-symbols-outlined text-3xl">microwave</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Microwave Safe</h3>
+                    <p class="text-gray-600 leading-relaxed">Durable enough to handle hot foods and microwave reheating
+                        without sagging.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table -->
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden mb-20">
+            <div class="p-8 md:p-12">
+                <h2 class="text-3xl font-bold text-center mb-8">Better Than The Rest</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="p-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Feature</th>
+                                <th
+                                    class="p-4 text-sm font-bold text-[#6ee619] uppercase tracking-wider bg-green-50/50 rounded-t-lg">
+                                    ORE Plates</th>
+                                <th class="p-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Plastic</th>
+                                <th class="p-4 text-sm font-bold text-gray-500 uppercase tracking-wider">Paper</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <tr>
+                                <td class="p-4 font-medium text-gray-900">Decomposition</td>
+                                <td class="p-4 text-green-700 bg-green-50/30 font-bold">60 Days</td>
+                                <td class="p-4 text-red-600">450+ Years</td>
+                                <td class="p-4 text-orange-600">Weeks (if uncoated)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-gray-900">Chemicals</td>
+                                <td class="p-4 text-green-700 bg-green-50/30 font-bold">None</td>
+                                <td class="p-4 text-red-600">BPA / Toxins</td>
+                                <td class="p-4 text-orange-600">Bleach / Dyes</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-gray-900">Heat Resistance</td>
+                                <td class="p-4 text-green-700 bg-green-50/30 font-bold">High</td>
+                                <td class="p-4 text-red-600">Melts</td>
+                                <td class="p-4 text-orange-600">Sogs</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-gray-900">Resource</td>
+                                <td class="p-4 text-green-700 bg-green-50/30 font-bold">Fallen Leaves</td>
+                                <td class="p-4 text-red-600">Petroleum</td>
+                                <td class="p-4 text-orange-600">Trees</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#1a1a1a] text-white pt-16 pb-8 border-t-4 border-[#6ee619]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div>
+                <div class="mb-4">
+                    <img src="assets/images/logo.png" alt="ORE Plates" class="h-16 w-auto">
+                </div>
+                <p class="text-gray-400 leading-relaxed text-sm" data-i18n="p_footer_desc">
+                    Our Responsible Earth. Manufacturing high-quality, eco-friendly areca leaf plates since 2024.
+                </p>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-4 text-[#6ee619]" data-i18n="h4_quicklinks">Quick Links</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="products.html" class="hover:text-white transition-colors"
+                            data-i18n="nav_products">Products</a></li>
+                    <li><a href="about.html" class="hover:text-white transition-colors" data-i18n="nav_about">About
+                            Us</a></li>
+                    <li><a href="bulk-export.html" class="hover:text-white transition-colors" data-i18n="btn_bulk">Bulk
+                            Order</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-bold mb-4 text-[#6ee619]" data-i18n="h4_contact">Contact</h4>
+                <ul class="space-y-3 text-gray-400 text-sm">
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">location_on</span> Kallakurichi, Tamil Nadu
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">phone</span> <a href="tel:+917639754311"
+                            class="hover:text-white transition-colors">+91 76397 54311</a>
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">mail</span> oreplates@gmail.com
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-500"
+            data-i18n="p_rights">
+            &copy; 2026 ORE Plates. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
