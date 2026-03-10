@@ -87,12 +87,17 @@
                 
                 <div style="margin-bottom: 1.5rem;">
                     <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Customer Avatar</label>
-                    <div class="upload-area" onclick="document.getElementById('file-input').click()">
-                        <div id="avatar-preview-cont" style="display: none; margin-bottom: 1rem;">
-                            <img id="avatar-preview" src="" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                    <div class="upload-area" onclick="document.getElementById('file-input').click()" style="position: relative;">
+                        <div id="avatar-preview-cont" style="display: none; position: relative; width: 80px; height: 80px; margin: 0 auto 1rem;">
+                            <img id="avatar-preview" src="" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                            <button type="button" onclick="removeSelectedAvatar(event)" style="position: absolute; top: -5px; right: -5px; background: rgba(239,68,68,0.9); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                                <i class="fas fa-times" style="font-size: 0.7rem;"></i>
+                            </button>
                         </div>
-                        <i class="fas fa-user-circle" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem;"></i>
-                        <p style="font-size: 0.85rem; color: #64748b;">Click to upload headshot</p>
+                        <div id="avatar-placeholder">
+                            <i class="fas fa-user-circle" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem;"></i>
+                            <p style="font-size: 0.85rem; color: #64748b;">Click to upload headshot</p>
+                        </div>
                         <input type="file" id="file-input" accept="image/*" style="display: none;">
                     </div>
                     <div class="upload-progress" id="upload-progress">
@@ -248,9 +253,19 @@
             reader.onload = (e) => {
                 document.getElementById('avatar-preview').src = e.target.result;
                 document.getElementById('avatar-preview-cont').style.display = 'block';
+                document.getElementById('avatar-placeholder').style.display = 'none';
             };
             reader.readAsDataURL(file);
         });
+
+        function removeSelectedAvatar(e) {
+            if(e) e.stopPropagation();
+            selectedFile = null;
+            document.getElementById('file-input').value = '';
+            document.getElementById('avatar-placeholder').style.display = 'block';
+            document.getElementById('avatar-preview-cont').style.display = 'none';
+            document.getElementById('avatar-preview').src = '';
+        }
 
         async function convertToWebP(file) {
             return new Promise((resolve) => {

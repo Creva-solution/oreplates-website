@@ -129,10 +129,18 @@
 
                     <div style="margin-bottom: 1.5rem;">
                         <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Product Image *</label>
-                        <div class="upload-area" id="p-drop-zone" style="position: relative;">
-                            <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem;"></i>
-                            <p style="font-size: 0.85rem; color: #64748b;">Click or drag product image</p>
-                            <small style="font-size: 0.75rem; color: #94a3b8;">PNG, JPG, JPEG (Converted to WebP)</small>
+                        <div class="upload-area" id="p-drop-zone" style="position: relative; min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                            <div id="p-upload-placeholder">
+                                <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem;"></i>
+                                <p style="font-size: 0.85rem; color: #64748b;">Click or drag product image</p>
+                                <small style="font-size: 0.75rem; color: #94a3b8;">PNG, JPG, JPEG</small>
+                            </div>
+                            <div id="p-thumbnail-preview" style="display: none; width: 100%; height: 100%; position: absolute; top: 0; left: 0; padding: 10px;">
+                                <img id="p-thumb-img" src="" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                                <button type="button" onclick="removeSelectedProductImage(event)" style="position: absolute; top: 5px; right: 5px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                                    <i class="fas fa-trash-alt" style="font-size: 0.8rem;"></i>
+                                </button>
+                            </div>
                             <input type="file" id="p-file-input" accept="image/jpeg,image/png,image/jpg" style="display: none;">
                         </div>
                         <div class="upload-progress" id="p-upload-progress" style="margin-top: 10px;">
@@ -147,7 +155,7 @@
                         </div>
                         <div>
                             <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Discount (%)</label>
-                            <input type="number" id="p-discount" step="1" value="0" min="0" max="100" style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px;">
+                            <input type="number" id="p-discount" step="1" value="0" min="0" style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px;">
                         </div>
                     </div>
 
@@ -239,12 +247,29 @@
 
         function handleProductFile(file) {
             if (!file) return;
+            if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+                return alert('Please upload JPG, JPEG or PNG images only.');
+            }
             selectedProductFile = file;
             const reader = new FileReader();
             reader.onload = (e) => {
+                // Update live website preview
                 document.getElementById('prev-img').src = e.target.result;
+                // Update thumbnail in upload area
+                document.getElementById('p-thumb-img').src = e.target.result;
+                document.getElementById('p-upload-placeholder').style.display = 'none';
+                document.getElementById('p-thumbnail-preview').style.display = 'block';
             };
             reader.readAsDataURL(file);
+        }
+
+        function removeSelectedProductImage(e) {
+            if(e) e.stopPropagation();
+            selectedProductFile = null;
+            document.getElementById('p-file-input').value = '';
+            document.getElementById('p-upload-placeholder').style.display = 'block';
+            document.getElementById('p-thumbnail-preview').style.display = 'none';
+            document.getElementById('prev-img').src = '../assets/images/logo.svg';
         }
 
         async function convertToWebP(file) {
