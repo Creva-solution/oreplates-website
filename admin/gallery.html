@@ -6,17 +6,17 @@
     <title>Manage Gallery - Oreplates Admin</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-common.css">
     <style>
-        body { display: flex; background: #f0f2f5; min-height: 100vh; }
-        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; z-index: 100; }
-        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
-        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); text-decoration: none; color: white; opacity: 0.8; }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); opacity: 1; }
+        .grid-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+        .gallery-card { position: relative; border-radius: 12px; overflow: hidden; height: 200px; box-shadow: var(--shadow); border: 2px solid white; transition: 0.3s; }
+        .gallery-card img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-delete { position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; opacity: 0; }
+        .gallery-card:hover .btn-delete { opacity: 1; }
+        .gallery-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        .category-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; }
         
-        .gallery-admin-container { background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow); }
-        .upload-section { margin-bottom: 3rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 2rem; }
         .upload-form { display: flex; flex-direction: column; gap: 1.5rem; }
-        
         .drop-zone { border: 2px dashed #cbd5e0; border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc; }
         .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: #f0fdf4; }
         .drop-zone i { font-size: 2.5rem; color: #a0aec0; margin-bottom: 1rem; }
@@ -28,19 +28,8 @@
         .preview-container .remove-preview { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 0.8rem; }
         
         .form-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: flex-end; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
-        .form-control { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; }
-        
         .upload-progress { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; display: none; margin-bottom: 1rem; }
         .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
-        
-        /* ... existing drawer/card styles ... */
-        .grid-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
-        .gallery-card { position: relative; border-radius: 12px; overflow: hidden; height: 200px; box-shadow: var(--shadow); border: 2px solid white; transition: 0.3s; }
-        .gallery-card img { width: 100%; height: 100%; object-fit: cover; }
-        .btn-delete { position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; opacity: 0; }
-        .gallery-card:hover .btn-delete { opacity: 1; }
-        .gallery-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
         
         .category-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; }
         
@@ -122,6 +111,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="auth-check.js"></script>
+    <script src="admin-common.js"></script>
     <script>
         const form = document.getElementById('galleryForm');
         const grid = document.getElementById('galleryGrid');

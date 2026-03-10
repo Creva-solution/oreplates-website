@@ -1,0 +1,221 @@
+/* Admin Common Styles */
+:root {
+    --admin-sidebar-width: 260px;
+}
+
+body {
+    display: flex;
+    background: #f0f2f5;
+    min-height: 100vh;
+    margin: 0;
+    transition: var(--transition);
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: var(--admin-sidebar-width);
+    height: 100vh;
+    background: var(--primary-dark);
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 2rem 1rem;
+    z-index: 2000;
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1900;
+    display: none;
+    backdrop-filter: blur(4px);
+}
+
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 1rem;
+    margin-bottom: 2.5rem;
+    color: white;
+    text-decoration: none;
+}
+
+.sidebar .logo img {
+    height: 35px;
+    filter: brightness(0) invert(1);
+}
+
+.sidebar .logo span {
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    transition: var(--transition);
+    text-decoration: none;
+    color: white;
+    opacity: 0.8;
+}
+
+.nav-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: rgba(255,255,255,0.1);
+    opacity: 1;
+}
+
+/* Main Content area */
+.main-content {
+    margin-left: var(--admin-sidebar-width);
+    width: calc(100% - var(--admin-sidebar-width));
+    padding: 2rem;
+    transition: var(--transition);
+    flex-grow: 1;
+}
+
+/* Common Admin UI Elements */
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.table-container {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+}
+
+tr:hover {
+    background: #f9f9f9;
+}
+
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-pending { background: #fff7ed; color: #9a3412; }
+.status-confirmed { background: #eff6ff; color: #1e40af; }
+.status-paid { background: #f0fdf4; color: #166534; }
+
+/* Responsive Adjustments */
+.mobile-header {
+    display: none;
+    background: white;
+    padding: 1rem 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.menu-trigger {
+    font-size: 1.5rem;
+    color: var(--primary);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--accent);
+}
+
+@media (max-width: 992px) {
+    body {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1.5rem;
+    }
+
+    .mobile-header {
+        display: flex;
+    }
+
+    .card {
+        padding: 1.5rem;
+    }
+
+    .table-container {
+        padding: 1rem;
+    }
+
+    /* Touch Friendly Buttons */
+    .btn, button, .btn-action {
+        min-height: 44px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .action-grid {
+        gap: 0.75rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .main-content {
+        padding: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+}

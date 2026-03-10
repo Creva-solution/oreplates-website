@@ -6,23 +6,13 @@
     <title>Manage Products - Oreplates Admin</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-common.css">
     <style>
-        body { display: flex; background: #f0f2f5; }
-        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; z-index: 100; }
-        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
-        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); }
-        
         .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
         
-        .table-container { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { text-align: left; padding: 1.2rem; border-bottom: 1px solid #edf2f7; }
-        th { color: #64748b; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
-        
         /* Modal Styles */
-        .modal { display: none; position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; overflow-y: auto;}
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; overflow-y: auto;}
         .modal-content { 
             background: white; 
             margin: 2rem auto; 
@@ -50,16 +40,12 @@
         }
         .upload-area:hover { border-color: var(--primary); background: #f0fdf4; }
         
-        .optimized-msg {
-            background: #dcfce7;
-            color: #166534;
-            padding: 0.6rem 1rem;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            display: none;
-            align-items: center;
-            gap: 8px;
+        @media (max-width: 992px) {
+            .modal-content { grid-template-columns: 1fr; margin: 1rem auto; border-radius: 12px; }
+            .preview-side { display: none; }
+            .form-side { padding: 1.5rem; }
+            .header-actions { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .header-actions button { width: 100%; }
         }
     </style>
 </head>
@@ -206,6 +192,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="auth-check.js"></script>
+    <script src="admin-common.js"></script>
     <script>
         // Toggle New Category Input
         function toggleNewCat() {

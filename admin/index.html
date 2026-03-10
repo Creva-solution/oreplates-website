@@ -6,22 +6,12 @@
     <title>Admin Dashboard - Oreplates</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-common.css">
     <style>
-        body { display: flex; background: #f0f2f5; }
-        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; }
-        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
-        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); }
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
         .stat-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); }
         .stat-card h3 { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; }
         .stat-card .value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
-        .table-container { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); }
-        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid #eee; }
-        tr:hover { background: #f9f9f9; }
-        .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
-        .status-pending { background: #fff7ed; color: #9a3412; }
     </style>
 </head>
 <body>
@@ -106,5 +96,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="auth-check.js"></script>
+    <script src="admin-common.js"></script>
 </body>
 </html>

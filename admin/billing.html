@@ -6,19 +6,16 @@
     <title>Offline Billing - Oreplates Admin</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/admin-common.css">
     <style>
-        body { display: flex; background: #f0f2f5; min-height: 100vh; }
-        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; z-index: 100; }
-        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
-        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); text-decoration: none; color: white; opacity: 0.8; }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); opacity: 1; }
-        
-        .billing-grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; }
-        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 2rem; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
-        .form-group { margin-bottom: 1.25rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+        .billing-grid { display: grid; grid-template-columns: 1fr 400px; gap: 2rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #4a5568; }
         .form-control { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 10px; font-family: inherit; }
+        .product-select-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .product-item { border: 2px solid #f1f5f9; border-radius: 12px; padding: 1rem; cursor: pointer; transition: 0.3s; text-align: center; }
+        .product-item.active { border-color: var(--primary); background: #f0fdf4; }
+        .product-item img { height: 60px; object-fit: contain; margin-bottom: 0.5rem; }
         
         /* Table Styles */
         .billing-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
@@ -48,6 +45,13 @@
             #invoice-print-area, #invoice-print-area * { visibility: visible; }
             #invoice-print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 0; }
             .no-print { display: none; }
+        }
+
+        @media (max-width: 992px) {
+            .billing-grid { grid-template-columns: 1fr; }
+            .preview-card { display: none; }
+            #invoice-print-area > div:first-child { flex-direction: column; align-items: center; text-align: center; }
+            #invCompanyInfo { text-align: center; margin-top: 1rem; }
         }
     </style>
 </head>

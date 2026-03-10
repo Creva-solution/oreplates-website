@@ -6,17 +6,7 @@
     <title>Manage Bulk Enquiries - Oreplates Admin</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { display: flex; background: #f0f2f5; }
-        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; }
-        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
-        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); }
-        .table-container { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); }
-        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
-        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid #eee; }
-        tr:hover { background: #f9f9f9; }
-    </style>
+    <link rel="stylesheet" href="../css/admin-common.css">
 </head>
 <body>
 
@@ -77,5 +67,7 @@
         </div>
     </div>
 
+    <script src="auth-check.js"></script>
+    <script src="admin-common.js"></script>
 </body>
 </html>
