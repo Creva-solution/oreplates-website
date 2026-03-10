@@ -29,6 +29,11 @@
             .inv-details-grid { grid-template-columns: 1fr; }
             .inv-summary { width: 100%; }
         }
+        
+        /* Fixed Desktop Layout for Image Generation */
+        .desktop-invoice-mode { width: 1000px !important; min-width: 1000px !important; margin: 0 !important; }
+        .desktop-invoice-mode .inv-header { flex-direction: row !important; text-align: left !important; }
+        .desktop-invoice-mode #inv-company-details { text-align: right !important; margin-top: 0 !important; }
     </style>
 </head>
 <body>
@@ -280,38 +285,50 @@
             const area = document.getElementById('invoice-print-area');
             const btn = event.currentTarget;
             const originalHtml = btn.innerHTML;
+            
+            // Force Desktop Layout for Capture
+            area.classList.add('desktop-invoice-mode');
+            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
             btn.disabled = true;
-
+ 
             try {
                 const canvas = await html2canvas(area, {
                     scale: 2,
                     useCORS: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    width: 1000 // Force 1000px width for the capture
                 });
                 
+                // Revert Layout
+                area.classList.remove('desktop-invoice-mode');
+ 
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                const file = new File([blob], `Invoice-${document.getElementById('inv-no').innerText}.png`, { type: 'image/png' });
-
+                const fileName = `Invoice-${document.getElementById('inv-no').innerText}.png`;
+                const file = new File([blob], fileName, { type: 'image/png' });
+ 
+                const phone = document.getElementById('inv-cust-phone').innerText.replace(/\D/g, '');
+ 
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
-                        title: 'Invoice',
+                        title: 'Oreplates Invoice',
                         text: 'Please find your invoice from Oreplates attached.'
                     });
                 } else {
-                    // Fallback: Download and alert
                     const link = document.createElement('a');
-                    link.download = `Invoice-${document.getElementById('inv-no').innerText}.png`;
+                    link.download = fileName;
                     link.href = URL.createObjectURL(blob);
                     link.click();
                     alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
                     
-                    const phone = document.getElementById('inv-cust-phone').innerText.replace(/\D/g, '');
-                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                    if (phone) {
+                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                    }
                 }
             } catch (err) {
                 console.error('Sharing failed:', err);
+                area.classList.remove('desktop-invoice-mode');
                 alert('Could not generate invoice image.');
             } finally {
                 btn.innerHTML = originalHtml;

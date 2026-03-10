@@ -50,9 +50,12 @@
         @media (max-width: 992px) {
             .billing-grid { grid-template-columns: 1fr; }
             .preview-card { display: none; }
-            #invoice-print-area > div:first-child { flex-direction: column; align-items: center; text-align: center; }
-            #invCompanyInfo { text-align: center; margin-top: 1rem; }
         }
+        
+        /* Fixed Desktop Layout for Image Generation */
+        .desktop-invoice-mode { width: 1000px !important; min-width: 1000px !important; margin: 0 !important; }
+        .desktop-invoice-mode .inv-header { flex-direction: row !important; text-align: left !important; }
+        .desktop-invoice-mode #invCompanyInfo { text-align: right !important; margin-top: 0 !important; }
     </style>
 </head>
 <body>
@@ -195,13 +198,13 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;" class="inv-details-grid">
                     <div>
                         <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #718096; font-weight: 700; margin-bottom: 0.8rem;">Invoice Details</p>
                         <p><strong>Invoice No:</strong> <span id="invNo">OFF-7822</span></p>
                         <p><strong>Date:</strong> <span id="invDate">Date</span></p>
                     </div>
-                    <div style="text-align: right;">
+                    <div style="text-align: right;" class="inv-cust-info">
                         <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #718096; font-weight: 700; margin-bottom: 0.8rem;">Billed To</p>
                         <p><strong id="invCustName">Customer</strong></p>
                         <p id="invCustPhone">Phone</p>
@@ -403,6 +406,10 @@
             const area = document.getElementById('invoice-print-area');
             const btn = event.currentTarget;
             const originalHtml = btn.innerHTML;
+            
+            // Force Desktop Layout for Capture
+            area.classList.add('desktop-invoice-mode');
+            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
             btn.disabled = true;
 
@@ -410,30 +417,41 @@
                 const canvas = await html2canvas(area, {
                     scale: 2,
                     useCORS: true,
-                    backgroundColor: '#ffffff'
+                    backgroundColor: '#ffffff',
+                    width: 1000 // Force 1000px width for the capture
                 });
                 
+                // Revert Layout
+                area.classList.remove('desktop-invoice-mode');
+
                 const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-                const file = new File([blob], `Invoice-${document.getElementById('invNo').innerText}.png`, { type: 'image/png' });
+                const fileName = `Invoice-${document.getElementById('invNo').innerText}.png`;
+                const file = new File([blob], fileName, { type: 'image/png' });
+
+                const phone = document.getElementById('custPhone').value.replace(/\D/g, '');
 
                 if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
-                        title: 'Invoice',
+                        title: 'Oreplates Invoice',
                         text: 'Please find your invoice from Oreplates attached.'
                     });
                 } else {
                     const link = document.createElement('a');
-                    link.download = `Invoice-${document.getElementById('invNo').innerText}.png`;
+                    link.download = fileName;
                     link.href = URL.createObjectURL(blob);
                     link.click();
                     alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
                     
-                    const phone = document.getElementById('custPhone').value.replace(/\D/g, '');
-                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                    if (phone) {
+                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                    } else {
+                        alert('Customer phone number not found for automatic WhatsApp redirection.');
+                    }
                 }
             } catch (err) {
                 console.error('Sharing failed:', err);
+                area.classList.remove('desktop-invoice-mode');
                 alert('Could not generate invoice image.');
             } finally {
                 btn.innerHTML = originalHtml;
