@@ -98,6 +98,11 @@
                         <input type="tel" id="custPhone" class="form-control" placeholder="+91 91763 97543">
                     </div>
                     <div class="form-group">
+                        <label>WhatsApp Number (Optional)</label>
+                        <input type="tel" id="custWA" class="form-control" placeholder="Direct WhatsApp number">
+                        <small style="color: #64748b; font-size: 0.8rem;">Used for direct sharing if entered.</small>
+                    </div>
+                    <div class="form-group">
                         <label>Address (Optional)</label>
                         <input type="text" id="custAddr" class="form-control" placeholder="Chennai, TN">
                     </div>
@@ -364,6 +369,7 @@
             currentItems = [];
             document.getElementById('custName').value = '';
             document.getElementById('custPhone').value = '';
+            document.getElementById('custWA').value = '';
             document.getElementById('custAddr').value = '';
             renderTable();
         }
@@ -428,9 +434,13 @@
                 const fileName = `Invoice-${document.getElementById('invNo').innerText}.png`;
                 const file = new File([blob], fileName, { type: 'image/png' });
 
-                const phone = document.getElementById('custPhone').value.replace(/\D/g, '');
+                const custPhone = document.getElementById('custPhone').value.replace(/\D/g, '');
+                const waNumber = document.getElementById('custWA').value.replace(/\D/g, '');
+                
+                // Prioritize WhatsApp number if provided, otherwise use user's phone
+                const targetPhone = waNumber || custPhone;
 
-                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                if (!waNumber && navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         files: [file],
                         title: 'Oreplates Invoice',
@@ -441,12 +451,17 @@
                     link.download = fileName;
                     link.href = URL.createObjectURL(blob);
                     link.click();
-                    alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
                     
-                    if (phone) {
-                        window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                    if (waNumber) {
+                        // Direct WhatsApp if number is provided
+                        const waFull = waNumber.length === 10 ? `91${waNumber}` : waNumber;
+                        window.open(`https://wa.me/${waFull}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                    } else if (custPhone) {
+                        // Fallback message
+                        alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
+                        window.open(`https://wa.me/${custPhone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
                     } else {
-                        alert('Customer phone number not found for automatic WhatsApp redirection.');
+                        alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
                     }
                 }
             } catch (err) {
