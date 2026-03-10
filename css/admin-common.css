@@ -219,3 +219,32 @@ tr:hover {
         font-size: 1.5rem;
     }
 }
+/* Upload Progress */
+.upload-progress {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1rem;
+    display: none;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+#toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #1a202c;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    display: none;
+    z-index: 1000;
+    box-shadow: var(--shadow-lg);
+}

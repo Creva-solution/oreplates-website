@@ -378,7 +378,7 @@
                 const fileName = `${Date.now()}-${webpFile.name}`;
                 const { data: uploadData, error: uploadError } = await window.supabaseInstance
                     .storage
-                    .from('products')
+                    .from('uploads')
                     .upload(`product-images/${fileName}`, webpFile);
 
                 if (uploadError) throw uploadError;
@@ -387,7 +387,7 @@
                 // 3. Get Public URL
                 const { data: urlData } = window.supabaseInstance
                     .storage
-                    .from('products')
+                    .from('uploads')
                     .getPublicUrl(`product-images/${fileName}`);
                 
                 const imageUrl = urlData.publicUrl;

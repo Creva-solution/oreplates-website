@@ -7,59 +7,382 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../css/admin-common.css">
+    <style>
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
+        .testimonial-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: var(--shadow); position: relative; }
+        .card-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .card-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; background: #f1f5f9; }
+        .card-meta h4 { margin: 0; font-size: 1rem; color: var(--primary-dark); }
+        .card-meta p { margin: 0; font-size: 0.8rem; color: var(--text-muted); }
+        .card-body { font-style: italic; color: #475569; position: relative; padding-left: 1.5rem; }
+        .card-body::before { content: '"'; position: absolute; left: 0; top: -10px; font-size: 2.5rem; color: #e2e8f0; font-family: serif; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; border-top: 1px solid #f1f5f9; padding-top: 1rem; }
+        .rating { color: #fbbf24; font-size: 0.9rem; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; overflow-y: auto; }
+        .modal-content { background: white; margin: 2rem auto; width: 600px; max-width: 95%; border-radius: 20px; padding: 2.5rem; animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .upload-area { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc; }
+        .upload-area:hover { border-color: var(--primary); background: #f0fdf4; }
+        
+        .upload-progress { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; display: none; margin-top: 1rem; }
+        .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        
+        #toast { position: fixed; bottom: 2rem; right: 2rem; background: #1a202c; color: white; padding: 1rem 2rem; border-radius: 8px; display: none; z-index: 1000; box-shadow: var(--shadow-lg); }
+    </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="logo" style="margin-bottom: 2.5rem; color: white;">
             <img src="../assets/images/logo.svg" alt="Logo" style="filter: brightness(0) invert(1); height: 35px;">
-            <span>Oreplates Admin</span>
+            <span style="font-weight: 700;">Oreplates Admin</span>
         </div>
         <a href="index.html" class="nav-item"><i class="fas fa-chart-line"></i> Dashboard</a>
         <a href="products.html" class="nav-item"><i class="fas fa-box"></i> Products</a>
         <a href="orders.html" class="nav-item"><i class="fas fa-shopping-cart"></i> Orders</a>
         <a href="billing.html" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Offline Billing</a>
-        <a href="bulk-enquiries.html" class="nav-item"><i class="fas fa-bulk-arrow-up"></i> Bulk Enquiries</a>
-        <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Contact Messages</a>
         <a href="gallery.html" class="nav-item"><i class="fas fa-images"></i> Gallery</a>
+        <a href="bulk-enquiries.html" class="nav-item"><i class="fas fa-envelope-open-text"></i> Bulk Enquiries</a>
+        <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages</a>
         <a href="testimonials.html" class="nav-item active"><i class="fas fa-comment-dots"></i> Testimonials</a>
         <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Company Settings</a>
+        <div style="margin-top: auto;">
+             <a href="../index.html" class="nav-item"><i class="fas fa-external-link-alt"></i> View Site</a>
+             <a href="#" class="nav-item" style="color: #ff4d4d;" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
     </div>
 
     <div class="main-content">
         <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h1>Testimonials</h1>
-            <button class="btn btn-primary"><i class="fas fa-plus"></i> Add Testimonial</button>
+            <div>
+                <h1>Testimonials Management</h1>
+                <p style="color: #64748b;">Manage what your customers are saying about you.</p>
+            </div>
+            <button onclick="openModal()" class="btn btn-primary" style="padding: 1rem 2rem; border-radius: 12px;">
+                <i class="fas fa-plus"></i> Add New Testimonial
+            </button>
         </header>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Review</th>
-                        <th>Rating</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Ravi Kumar</strong></td>
-                        <td style="max-width: 400px;">"Very strong and eco-friendly plates. Perfect for events."</td>
-                        <td style="color: #fbbf24;"><i class="fas fa-star"></i> 5.0</td>
-                        <td>
-                            <div style="display: flex; gap: 0.5rem;">
-                                <button class="btn btn-outline btn-sm"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm" style="background: #fee2e2; color: #991b1b;"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div id="loading" style="text-align: center; padding: 4rem;">
+            <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--primary);"></i>
+            <p>Loading testimonial database...</p>
+        </div>
+
+        <div class="testimonial-grid" id="testimonialGrid">
+            <!-- Testimonials will be loaded here -->
         </div>
     </div>
 
+    <!-- Modal -->
+    <div id="testimonialModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">New Testimonial</h2>
+            <p style="color: #64748b; margin-bottom: 2rem;">Fill in the details below.</p>
+            
+            <form id="testimonialForm">
+                <input type="hidden" id="entry-id">
+                
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Customer Avatar</label>
+                    <div class="upload-area" onclick="document.getElementById('file-input').click()">
+                        <div id="avatar-preview-cont" style="display: none; margin-bottom: 1rem;">
+                            <img id="avatar-preview" src="" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
+                        </div>
+                        <i class="fas fa-user-circle" style="font-size: 2rem; color: #cbd5e1; margin-bottom: 0.5rem;"></i>
+                        <p style="font-size: 0.85rem; color: #64748b;">Click to upload headshot</p>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="upload-progress" id="upload-progress">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Customer Name *</label>
+                        <input type="text" id="cust-name" required placeholder="e.g. Ravi Kumar" style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Location / Title</label>
+                        <input type="text" id="cust-title" placeholder="e.g. Event Planner, Delhi" style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px;">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Rating</label>
+                    <select id="cust-rating" style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px; background: white;">
+                        <option value="5">5 Stars</option>
+                        <option value="4">4 Stars</option>
+                        <option value="3">3 Stars</option>
+                        <option value="2">2 Stars</option>
+                        <option value="1">1 Star</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Testimonial Review *</label>
+                    <textarea id="cust-review" required placeholder="Write the customer's review here..." style="width: 100%; padding: 0.8rem; border: 1px solid #e2e8f0; border-radius: 12px; height: 100px;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" onclick="closeModal()" class="btn btn-outline" style="padding: 0.8rem 2rem; border-radius: 12px;">Cancel</button>
+                    <button type="submit" id="saveBtn" class="btn btn-primary" style="padding: 0.8rem 2rem; border-radius: 12px;">Save Testimonial</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast">Operation Successful!</div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
     <script src="auth-check.js"></script>
     <script src="admin-common.js"></script>
+    <script>
+        const grid = document.getElementById('testimonialGrid');
+        const modal = document.getElementById('testimonialModal');
+        const form = document.getElementById('testimonialForm');
+        let selectedFile = null;
+        let testimonials = [];
+
+        async function loadTestimonials() {
+            document.getElementById('loading').style.display = 'block';
+            grid.innerHTML = '';
+            
+            try {
+                const { data, error } = await window.supabaseInstance
+                    .from('testimonials')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                testimonials = data || [];
+                renderGrid();
+            } catch (err) {
+                console.error(err);
+                grid.innerHTML = '<p style="color:red; text-align:center;">Failed to load testimonials. Ensure the table exists.</p>';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            if (testimonials.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem;">No testimonials found. Add your first one!</p>';
+                return;
+            }
+
+            testimonials.forEach(t => {
+                const card = document.createElement('div');
+                card.className = 'testimonial-card';
+                card.innerHTML = `
+                    <div class="card-header">
+                        <img src="${t.avatar_url || 'https://via.placeholder.com/50'}" class="card-avatar" alt="${t.name}">
+                        <div class="card-meta">
+                            <h4>${t.name}</h4>
+                            <p>${t.title || 'Customer'}</p>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        ${t.review}
+                    </div>
+                    <div class="card-footer">
+                        <div class="rating">
+                            ${Array(parseInt(t.rating)).fill('<i class="fas fa-star"></i>').join('')}
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="editEntry('${t.id}')" class="btn btn-outline btn-sm" style="padding: 0.3rem 0.6rem;"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteEntry('${t.id}', '${t.avatar_url}')" class="btn btn-sm" style="padding: 0.3rem 0.6rem; background: #fee2e2; color: #ef4444; border:none;"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function openModal() {
+            form.reset();
+            document.getElementById('entry-id').value = '';
+            document.getElementById('modalTitle').innerText = 'New Testimonial';
+            document.getElementById('avatar-preview-cont').style.display = 'none';
+            selectedFile = null;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function editEntry(id) {
+            const t = testimonials.find(item => item.id === id);
+            if (!t) return;
+
+            document.getElementById('entry-id').value = t.id;
+            document.getElementById('cust-name').value = t.name;
+            document.getElementById('cust-title').value = t.title || '';
+            document.getElementById('cust-rating').value = t.rating;
+            document.getElementById('cust-review').value = t.review;
+            
+            if (t.avatar_url) {
+                document.getElementById('avatar-preview').src = t.avatar_url;
+                document.getElementById('avatar-preview-cont').style.display = 'block';
+            } else {
+                document.getElementById('avatar-preview-cont').style.display = 'none';
+            }
+
+            document.getElementById('modalTitle').innerText = 'Edit Testimonial';
+            modal.style.display = 'block';
+        }
+
+        // File handling
+        document.getElementById('file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('avatar-preview').src = e.target.result;
+                document.getElementById('avatar-preview-cont').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        async function convertToWebP(file) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    canvas.toBlob((blob) => {
+                        resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: 'image/webp' }));
+                    }, 'image/webp', 0.8);
+                };
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveBtn');
+            const id = document.getElementById('entry-id').value;
+            
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            try {
+                let avatarUrl = '';
+                // If editing and no new file, keep old avatar
+                if (id) {
+                    const current = testimonials.find(t => t.id === id);
+                    avatarUrl = current.avatar_url;
+                }
+
+                if (selectedFile) {
+                    document.getElementById('upload-progress').style.display = 'block';
+                    const progBar = document.getElementById('progress-bar');
+                    progBar.style.width = '20%';
+                    
+                    const webpFile = await convertToWebP(selectedFile);
+                    progBar.style.width = '40%';
+                    
+                    const fileName = `${Date.now()}-${webpFile.name}`;
+                    const { data: uploadData, error: uploadError } = await window.supabaseInstance
+                        .storage
+                        .from('uploads')
+                        .upload(`testimonials/${fileName}`, webpFile);
+
+                    if (uploadError) throw uploadError;
+                    progBar.style.width = '70%';
+
+                    const { data: urlData } = window.supabaseInstance
+                        .storage
+                        .from('uploads')
+                        .getPublicUrl(`testimonials/${fileName}`);
+                    
+                    avatarUrl = urlData.publicUrl;
+                    progBar.style.width = '100%';
+                }
+
+                const payload = {
+                    name: document.getElementById('cust-name').value,
+                    title: document.getElementById('cust-title').value,
+                    rating: parseInt(document.getElementById('cust-rating').value),
+                    review: document.getElementById('cust-review').value,
+                    avatar_url: avatarUrl
+                };
+
+                let error;
+                if (id) {
+                    const { error: err } = await window.supabaseInstance
+                        .from('testimonials')
+                        .update(payload)
+                        .eq('id', id);
+                    error = err;
+                } else {
+                    const { error: err } = await window.supabaseInstance
+                        .from('testimonials')
+                        .insert([payload]);
+                    error = err;
+                }
+
+                if (error) throw error;
+
+                showToast('Testimonial Saved!');
+                closeModal();
+                loadTestimonials();
+
+            } catch (err) {
+                console.error(err);
+                alert('Action failed: ' + err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = 'Save Testimonial';
+                document.getElementById('upload-progress').style.display = 'none';
+            }
+        });
+
+        async function deleteEntry(id, avatarUrl) {
+            if (confirm('Are you sure you want to delete this testimonial?')) {
+                try {
+                    const { error } = await window.supabaseInstance
+                        .from('testimonials')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+
+                    // Try to delete avatar from storage if possible
+                    if (avatarUrl && avatarUrl.includes('supabase.co')) {
+                        const filePath = avatarUrl.split('/storage/v1/object/public/uploads/')[1];
+                        if (filePath) {
+                            await window.supabaseInstance.storage.from('uploads').remove([filePath]);
+                        }
+                    }
+
+                    showToast('Deleted Successfully');
+                    loadTestimonials();
+                } catch (err) {
+                    alert('Delete failed: ' + err.message);
+                }
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        window.addEventListener('load', loadTestimonials);
+    </script>
 </body>
 </html>
