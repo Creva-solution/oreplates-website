@@ -147,11 +147,15 @@
 
             <div style="padding: 1.5rem; background: #f8fafc; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; display: flex; justify-content: flex-end; gap: 1rem;" class="no-print">
                 <button class="btn btn-outline" onclick="closeModal()">Close</button>
-                <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print / Save PDF</button>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print PDF</button>
+                    <button class="btn btn-primary" style="background: #25d366;" onclick="shareBillAsImage()"><i class="fab fa-whatsapp"></i> Share as Image</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="auth-check.js"></script>
@@ -194,7 +198,7 @@
                             <button class="btn-action btn-confirm" onclick="updateStatus('${ord.id}', 'Confirmed')"><i class="fas fa-check"></i></button>
                             <button class="btn-action btn-paid" onclick="updateStatus('${ord.id}', 'Paid')"><i class="fas fa-receipt"></i></button>
                             <button class="btn-action btn-bill" onclick="generateBill('${ord.id}', '${ord.product_name}', '${ord.quantity}', '${ord.unit_price}', '${ord.customer_name}', '${ord.customer_phone}', '${ord.customer_address}')"><i class="fas fa-file-invoice"></i></button>
-                            <button class="btn-action btn-send" onclick="sendBill('${cleanPhone}')"><i class="fab fa-whatsapp"></i></button>
+                            <button class="btn-action btn-send" onclick="shareBillAsImage('${ord.id}')"><i class="fab fa-whatsapp"></i></button>
                             <button class="btn-action btn-delete" onclick="deleteOrder('${ord.id}')"><i class="fas fa-trash"></i></button>
                         </div>
                     </td>
@@ -272,10 +276,47 @@
             document.getElementById('invoiceModal').style.display = 'none';
         }
 
-        function sendBill(phone) {
-            const cleanPhone = phone.replace(/\D/g, '');
-            const message = encodeURIComponent(`Hi, your order from Oreplates is being processed. Thank you for choosing sustainable tableware!`);
-            window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+        async function shareBillAsImage() {
+            const area = document.getElementById('invoice-print-area');
+            const btn = event.currentTarget;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            btn.disabled = true;
+
+            try {
+                const canvas = await html2canvas(area, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+                
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], `Invoice-${document.getElementById('inv-no').innerText}.png`, { type: 'image/png' });
+
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Invoice',
+                        text: 'Please find your invoice from Oreplates attached.'
+                    });
+                } else {
+                    // Fallback: Download and alert
+                    const link = document.createElement('a');
+                    link.download = `Invoice-${document.getElementById('inv-no').innerText}.png`;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
+                    
+                    const phone = document.getElementById('inv-cust-phone').innerText.replace(/\D/g, '');
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                }
+            } catch (err) {
+                console.error('Sharing failed:', err);
+                alert('Could not generate invoice image.');
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
         }
 
         window.onclick = function(event) {

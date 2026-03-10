@@ -238,11 +238,15 @@
 
             <div style="padding: 1.5rem; background: #f8fafc; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; display: flex; justify-content: flex-end; gap: 1rem;" class="no-print">
                 <button class="btn btn-outline" onclick="closeModal()">Close</button>
-                <button class="btn btn-bill" onclick="shareWhatsApp()"><i class="fab fa-whatsapp"></i> Share on WhatsApp</button>
-                <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print / Save PDF</button>
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print PDF</button>
+                    <button class="btn btn-primary" style="background: #25d366;" onclick="shareInvoiceAsImage()"><i class="fab fa-whatsapp"></i> Share as Image</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
     <script>
         let currentItems = [];
@@ -395,23 +399,46 @@
             document.getElementById('invoiceModal').style.display = 'none';
         }
 
-        function shareWhatsApp() {
-            const phone = document.getElementById('custPhone').value.replace(/\D/g, '');
-            if (!phone) return alert('Enter a phone number');
+        async function shareInvoiceAsImage() {
+            const area = document.getElementById('invoice-print-area');
+            const btn = event.currentTarget;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            btn.disabled = true;
 
-            const name = document.getElementById('custName').value;
-            let msg = `*Oreplates Invoice Summary*\n\n`;
-            msg += `Customer: ${name}\n`;
-            msg += `Date: ${document.getElementById('invDate').innerText}\n`;
-            msg += `--------------------------\n`;
-            currentItems.forEach(item => {
-                msg += `${item.size} x ${item.qty} = ₹${item.total}\n`;
-            });
-            msg += `--------------------------\n`;
-            msg += `*Total Amount: ${document.getElementById('invTotal').innerText}*\n\n`;
-            msg += `Thank you for your business!`;
+            try {
+                const canvas = await html2canvas(area, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                });
+                
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                const file = new File([blob], `Invoice-${document.getElementById('invNo').innerText}.png`, { type: 'image/png' });
 
-            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, '_blank');
+                if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Invoice',
+                        text: 'Please find your invoice from Oreplates attached.'
+                    });
+                } else {
+                    const link = document.createElement('a');
+                    link.download = `Invoice-${document.getElementById('invNo').innerText}.png`;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    alert('Invoice image downloaded. You can now attach it manually to WhatsApp.');
+                    
+                    const phone = document.getElementById('custPhone').value.replace(/\D/g, '');
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent('Hi, I am sending your invoice as an image. Please check it.')}`, '_blank');
+                }
+            } catch (err) {
+                console.error('Sharing failed:', err);
+                alert('Could not generate invoice image.');
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
         }
 
         /* Settings Logic */
