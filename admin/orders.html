@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders - Oreplates Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { display: flex; background: #f0f2f5; }
+        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); }
+        .table-container { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow); }
+        table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+        th, td { text-align: left; padding: 1rem; border-bottom: 1px solid #eee; }
+        tr:hover { background: #f9f9f9; }
+        .status-badge { padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .status-pending { background: #fff7ed; color: #9a3412; }
+        .status-confirmed { background: #eff6ff; color: #1e40af; }
+        .status-paid { background: #f0fdf4; color: #166534; }
+        
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+        .btn-action { padding: 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; border: none; transition: var(--transition); display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-confirm { background: #dbeafe; color: #1e40af; }
+        .btn-paid { background: #dcfce7; color: #166534; }
+        .btn-bill { background: #f3f4f6; color: #374151; }
+        .btn-send { background: #25d366; color: white; }
+        
+        /* Invoice Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 2rem; overflow-y: auto; }
+        .modal-body { background: white; width: 800px; max-width: 100%; border-radius: 16px; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        
+        /* Invoice Design */
+        #invoice-print-area { padding: 3rem; font-family: 'Inter', sans-serif; color: #1a202c; }
+        .inv-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 2rem; }
+        .inv-logo img { height: 50px; margin-bottom: 10px; }
+        .inv-company-info { text-align: right; font-size: 0.9rem; color: #4a5568; line-height: 1.4; }
+        
+        .inv-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem; }
+        .inv-section-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #718096; font-weight: 700; margin-bottom: 0.8rem; }
+        
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; }
+        .inv-table th { background: #f8fafc; text-align: left; padding: 1rem; font-size: 0.85rem; text-transform: uppercase; color: #64748b; }
+        .inv-table td { padding: 1.2rem 1rem; border-bottom: 1px solid #f1f5f9; }
+        
+        .inv-summary { margin-left: auto; width: 300px; }
+        .inv-summary-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid #f1f5f9; }
+        .inv-total { font-size: 1.4rem; font-weight: 800; color: var(--primary); border-bottom: none; }
+        
+        .inv-footer { margin-top: 4rem; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 2rem; }
+        .eco-note { color: var(--primary); font-weight: 600; font-size: 0.9rem; margin-top: 5px; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #invoice-print-area, #invoice-print-area * { visibility: visible; }
+            #invoice-print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 0; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo" style="margin-bottom: 2.5rem; color: white;">
+            <img src="../assets/images/logo.svg" alt="Logo" style="filter: brightness(0) invert(1); height: 35px;">
+            <span>Oreplates Admin</span>
+        </div>
+        <a href="index.html" class="nav-item"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="products.html" class="nav-item"><i class="fas fa-box"></i> Products</a>
+        <a href="orders.html" class="nav-item active"><i class="fas fa-shopping-cart"></i> Orders</a>
+        <a href="billing.html" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Offline Billing</a>
+        <a href="gallery.html" class="nav-item"><i class="fas fa-images"></i> Gallery</a>
+        <a href="bulk-enquiries.html" class="nav-item"><i class="fas fa-envelope-open-text"></i> Bulk Enquiries</a>
+        <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="testimonials.html" class="nav-item"><i class="fas fa-comment-dots"></i> Testimonials</a>
+        <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Company Settings</a>
+    </div>
+
+    <div class="main-content">
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1>Order Management</h1>
+            <div style="display: flex; gap: 1rem;">
+                <input type="text" placeholder="Search orders..." style="padding: 0.7rem 1rem; border: 1px solid #ddd; border-radius: 8px; width: 300px;">
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Customer Name</th>
+                        <th>Phone Number</th>
+                        <th>Order Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="orders-list">
+                    <tr>
+                        <td>#ORD-7821</td>
+                        <td>Round Plate (10")</td>
+                        <td>200</td>
+                        <td><strong>Ravi Kumar</strong></td>
+                        <td>+91 98765 43210</td>
+                        <td><span class="status-badge status-pending" id="status-7821">Pending</span></td>
+                        <td>
+                            <div class="action-grid">
+                                <button class="btn-action btn-confirm" onclick="updateStatus('7821', 'Confirmed')"><i class="fas fa-check"></i> Confirm</button>
+                                <button class="btn-action btn-paid" onclick="updateStatus('7821', 'Paid')"><i class="fas fa-receipt"></i> Paid</button>
+                                <button class="btn-action btn-bill" onclick="generateBill('7821', 'Round Plate (10&quot;)', '200', '12.00', 'Ravi Kumar', '+91 98765 43210', 'Salem, 636001')"><i class="fas fa-file-invoice"></i> Bill</button>
+                                <button class="btn-action btn-send" onclick="sendBill('+919876543210')"><i class="fab fa-whatsapp"></i> Send</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Invoice Modal -->
+    <div id="invoiceModal" class="modal">
+        <div class="modal-body">
+            <div id="invoice-print-area">
+                <div class="inv-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 2rem;">
+                    <div class="inv-logo" style="display: flex; align-items: center; gap: 15px;">
+                        <img src="../assets/images/logo.svg" alt="Oreplates Logo" id="inv-brand-logo" style="height: 60px; width: auto; object-fit: contain;">
+                        <h2 style="color: var(--primary); margin: 0; font-size: 2.2rem; line-height: 1;" id="inv-brand-name">Oreplates</h2>
+                    </div>
+                    <div class="inv-company-info" id="inv-company-details">
+                        <strong>Oreplates Sustainable Tableware</strong><br>
+                        123 Eco Industrial Park,<br>
+                        Salem, Tamil Nadu - 636001<br>
+                        Contact: +91 98765 43210
+                    </div>
+                </div>
+
+                <div class="inv-details-grid">
+                    <div>
+                        <p class="inv-section-title">Invoice Details</p>
+                        <p><strong>Invoice No:</strong> <span id="inv-no">INV-7821</span></p>
+                        <p><strong>Date:</strong> <span id="inv-date">March 10, 2026</span></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p class="inv-section-title">Billed To</p>
+                        <p><strong id="inv-cust-name">Ravi Kumar</strong></p>
+                        <p id="inv-cust-phone">+91 98765 43210</p>
+                        <p id="inv-cust-addr" style="font-size: 0.9rem; color: #4a5568;">Salem, 636001</p>
+                    </div>
+                </div>
+
+                <table class="inv-table">
+                    <thead>
+                        <tr>
+                            <th>Product Description</th>
+                            <th>Price</th>
+                            <th>Qty</th>
+                            <th style="text-align: right;">Total Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong id="inv-prod-name">Round Plate (10")</strong></td>
+                            <td id="inv-unit-price">₹12.00</td>
+                            <td id="inv-qty">200</td>
+                            <td style="text-align: right;"><strong id="inv-total-line">₹2,400.00</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="inv-summary">
+                    <div class="inv-summary-row">
+                        <span>Payment Status:</span>
+                        <span id="inv-pay-status" style="font-weight: 700; color: #9a3412;">PENDING</span>
+                    </div>
+                    <div class="inv-summary-row inv-total">
+                        <span>Total:</span>
+                        <span id="inv-grand-total">₹2,400.00</span>
+                    </div>
+                </div>
+
+                <div class="inv-footer">
+                    <p style="font-weight: 700;">Thank you for your business!</p>
+                    <p style="font-size: 0.85rem; color: #718096; margin-top: 5px;">This is a computer-generated invoice.</p>
+                    <p class="eco-note">♻ Crafted with care for the Planet.</p>
+                </div>
+            </div>
+
+            <div style="padding: 1.5rem; background: #f8fafc; border-bottom-left-radius: 16px; border-bottom-right-radius: 16px; display: flex; justify-content: flex-end; gap: 1rem;" class="no-print">
+                <button class="btn btn-outline" onclick="closeModal()">Close</button>
+                <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print / Save PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(id, status) {
+            const badge = document.getElementById(`status-${id}`);
+            badge.innerText = status;
+            badge.className = `status-badge status-${status.toLowerCase()}`;
+        }
+
+        function generateBill(id, prod, qty, price, cust, phone, addr) {
+            // Pull company info
+            const settings = JSON.parse(localStorage.getItem('company_settings') || '{}');
+            const logoEl = document.getElementById('inv-brand-logo');
+            const fallbackLogo = '../assets/images/logo.svg';
+
+            logoEl.onerror = () => {
+                logoEl.src = fallbackLogo;
+                logoEl.onerror = null;
+            };
+
+            if (settings.name) {
+                document.getElementById('inv-brand-name').innerText = settings.name.split(' ')[0];
+                logoEl.src = settings.logo_url || settings.logo || fallbackLogo;
+                document.getElementById('inv-company-details').innerHTML = `
+                    <strong>${settings.name}</strong><br>
+                    ${settings.address.replace(/\n/g, '<br>')}<br>
+                    Contact: ${settings.phone.split(',')[0]}
+                `;
+            } else {
+                logoEl.src = fallbackLogo;
+            }
+
+            const total = (parseFloat(price) * parseInt(qty)).toFixed(2);
+            const status = document.getElementById(`status-${id}`).innerText.toUpperCase();
+            
+            document.getElementById('inv-no').innerText = `INV-${id}`;
+            document.getElementById('inv-date').innerText = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('inv-cust-name').innerText = cust;
+            document.getElementById('inv-cust-phone').innerText = phone;
+            document.getElementById('inv-cust-addr').innerText = addr;
+            document.getElementById('inv-prod-name').innerText = prod;
+            document.getElementById('inv-unit-price').innerText = `₹${parseFloat(price).toFixed(2)}`;
+            document.getElementById('inv-qty').innerText = qty;
+            document.getElementById('inv-total-line').innerText = `₹${total}`;
+            document.getElementById('inv-pay-status').innerText = status;
+            document.getElementById('inv-grand-total').innerText = `₹${total}`;
+            
+            // Set dynamic color for status
+            document.getElementById('inv-pay-status').style.color = status === 'PAID' ? '#166534' : '#9a3412';
+
+            document.getElementById('invoiceModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('invoiceModal').style.display = 'none';
+        }
+
+        function sendBill(phone) {
+            const cleanPhone = phone.replace(/\D/g, '');
+            const message = encodeURIComponent(`Hi, your invoice from Oreplates is ready. Please find the details attached/sent below.`);
+            window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
+        }
+
+        // Close on backdrop click
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('invoiceModal')) closeModal();
+        }
+    </script>
+</body>
+</html>

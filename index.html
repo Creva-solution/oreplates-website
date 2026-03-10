@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oreplates - Eco-Friendly Areca Leaf Plates | Sustainable Tableware</title>
+    <meta name="description" content="Premium eco-friendly areca leaf plates manufacturer. Biodegradable, compostable and stylish tableware for weddings, parties and events.">
+    <!-- Font Preloading -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" as="style">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav id="top-nav">
+        <div class="container nav-content">
+            <!-- Left Section: Logo & Brand -->
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.svg" alt="Oreplates Logo" loading="eager">
+                    <span>Oreplates</span>
+                </a>
+            </div>
+
+            <!-- Center Section: Main Navigation Links -->
+            <div class="nav-center">
+                <div class="nav-links" id="nav-links">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="products.html">Products</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="bulk-order.html">Bulk Order</a>
+                    <a href="about.html">About</a>
+                    <a href="contact.html" class="mobile-nav-only">Contact</a>
+                </div>
+            </div>
+            
+            <!-- Right Section: Tools & CTA -->
+            <div class="nav-right">
+                <div class="lang-switch">
+                    <button id="lang-en" class="lang-btn active" onclick="translatePage('en')">EN</button>
+                    <button id="lang-ta" class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
+                </div>
+                <a href="contact.html" class="btn btn-primary">Contact</a>
+                <div class="menu-toggle" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Slider -->
+    <section class="hero">
+        <div class="hero-slide active" style="background-image: url('assets/images/hero-bg.png');"></div>
+        <div class="hero-slide" style="background-image: url('assets/images/hero-artistic.png');"></div>
+        <div class="hero-slide" style="background-image: url('assets/images/hero-premium.png');"></div>
+        <div class="hero-overlay"></div>
+        <div class="container" data-aos="fade-up">
+            <div class="exp-badge">
+                <i class="fas fa-certificate"></i>
+                <span>14+ Years of Industry Experience</span>
+            </div>
+            <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem;">Nature's Elegance on Your Table</h1>
+            <p style="font-size: 1.25rem; max-width: 800px; margin: 0 auto 2.5rem; opacity: 0.9;">100% Biodegradable & Compostable Areca Leaf Plates. The perfect eco-friendly alternative for a sustainable tomorrow.</p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center;">
+                <a href="products.html" class="btn btn-primary">View Products</a>
+                <a href="bulk-order.html" class="btn btn-outline" style="border-color: white; color: white;">Bulk Enquiry</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Why Choose Oreplates?</h2>
+                <p>Derived from nature, returned to nature. Our plates are crafted with precision and care.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.5rem;">
+                <div style="text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: var(--shadow);" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fas fa-leaf" style="font-size: 3rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+                    <h3 style="margin-bottom: 1rem;">100% Natural</h3>
+                    <p>Made from naturally fallen areca palm leaves. No chemicals, no toxins.</p>
+                </div>
+                <div style="text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: var(--shadow);" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-recycle" style="font-size: 3rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+                    <h3 style="margin-bottom: 1rem;">Biodegradable</h3>
+                    <p>Completely compostable within 60-90 days, enriching the soil.</p>
+                </div>
+                <div style="text-align: center; padding: 2rem; background: white; border-radius: 15px; box-shadow: var(--shadow);" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--primary); margin-bottom: 1.5rem;"></i>
+                    <h3 style="margin-bottom: 1rem;">Durable & Strong</h3>
+                    <p>Microwave safe, leak-proof, and suitable for both hot and cold foods.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products" style="background-color: var(--accent);">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Our Featured Products</h2>
+                <p>Explore our wide range of elegant and sustainable tableware solutions.</p>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;" id="featured-list">
+                <!-- Products will be loaded here -->
+                <div class="product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow);" data-aos="zoom-in">
+                    <div style="height: 250px; background: url('assets/images/plate-round-10.png'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 1.5rem;">
+                        <h3>Round Plates</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">10 Inch | 25 Pieces</p>
+                        <a href="products.html" class="btn btn-outline" style="width: 100%;">Order Now</a>
+                    </div>
+                </div>
+                <div class="product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow);" data-aos="zoom-in" data-aos-delay="100">
+                    <div style="height: 250px; background: url('assets/images/plate-square.png'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 1.5rem;">
+                        <h3>Square Plates</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">8 Inch | 25 Pieces</p>
+                        <a href="products.html" class="btn btn-outline" style="width: 100%;">Order Now</a>
+                    </div>
+                </div>
+                <div class="product-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow);" data-aos="zoom-in" data-aos-delay="200">
+                    <div style="height: 250px; background: url('assets/images/plate-partition.png'); background-size: cover; background-position: center;"></div>
+                    <div style="padding: 1.5rem;">
+                        <h3>Bowls</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">4 Inch | 50 Pieces</p>
+                        <a href="products.html" class="btn btn-outline" style="width: 100%;">Order Now</a>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="products.html" class="btn btn-primary">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Manufacturing Process -->
+    <section class="process">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Our Manufacturing Process</h2>
+                <p>How we turn fallen leaves into premium tableware.</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4rem;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+                    <div data-aos="fade-right">
+                        <span style="color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">Step 01</span>
+                        <h3 style="font-size: 2rem; margin: 1rem 0;">Collection & Sorting</h3>
+                        <p>We ethically source naturally fallen sheaths from Areca palm trees. Only the best quality sheaths are selected for processing.</p>
+                    </div>
+                    <img src="assets/images/stage1.png" alt="Collection & Sorting" style="width: 100%; height: 300px; object-fit: cover; border-radius: 20px;" data-aos="fade-left">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+                    <img src="assets/images/stage2.png" alt="Cleaning & Heat Pressing" style="width: 100%; height: 300px; object-fit: cover; border-radius: 20px;" data-aos="fade-right">
+                    <div data-aos="fade-left">
+                        <span style="color: var(--primary); font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">Step 02</span>
+                        <h3 style="font-size: 2rem; margin: 1rem 0;">Cleaning & Heat Pressing</h3>
+                        <p>Leaves are thoroughly cleaned and then heat-pressed into various shapes using steam. No chemicals or binders are added during this process.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Premium Scrolling Testimonials -->
+    <section class="premium-testimonials">
+        <div class="lighting-effect"></div>
+        <div class="container" data-aos="fade-up">
+            <div class="section-title light">
+                <h2>Loved by Eco-Conscious Brands</h2>
+                <p>Discover why leading event planners and retailers choose Oreplates.</p>
+            </div>
+        </div>
+        
+        <div class="marquee-container">
+            <div class="marquee-track">
+                <!-- Set 1 -->
+                <div class="testimonial-card-small">
+                    <p class="quote">"Superior quality and incredibly strong. These plates handled our heavy buffet perfectly without any leaks."</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">RK</div>
+                        <div class="meta">
+                            <h4>Ravi Kumar</h4>
+                            <p>Event Planner, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card-small">
+                    <p class="quote">"The natural texture is beautiful. Every plate is unique and adds such a premium touch to our decor."</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">AS</div>
+                        <div class="meta">
+                            <h4>Anita Singh</h4>
+                            <p>Restaurateur, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card-small">
+                    <p class="quote">"Our clients love that these are completely compostable. Sustainable luxury at its finest."</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">JT</div>
+                        <div class="meta">
+                            <h4>Jonathan Thorne</h4>
+                            <p>Designer, Bloom & Stem</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card-small">
+                    <p class="quote">"Fast shipping and great customer service. The packaging was eco-friendly too!"</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">MP</div>
+                        <div class="meta">
+                            <h4>Meera Patel</h4>
+                            <p>Wedding Coordinator</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Duplicate Set for Seamless Loop -->
+                <div class="testimonial-card-small">
+                    <p class="quote">"Superior quality and incredibly strong. These plates handled our heavy buffet perfectly without any leaks."</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">RK</div>
+                        <div class="meta">
+                            <h4>Ravi Kumar</h4>
+                            <p>Event Planner, Delhi</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card-small">
+                    <p class="quote">"The natural texture is beautiful. Every plate is unique and adds such a premium touch to our decor."</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">AS</div>
+                        <div class="meta">
+                            <h4>Anita Singh</h4>
+                            <p>Restaurateur, Mumbai</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card-small">
+                    <p class="quote">"Our clients love that these are completely compostable. Sustainable luxury at its finest."</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">JT</div>
+                        <div class="meta">
+                            <h4>Jonathan Thorne</h4>
+                            <p>Designer, Bloom & Stem</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card-small">
+                    <p class="quote">"Fast shipping and great customer service. The packaging was eco-friendly too!"</p>
+                    <div class="author-info">
+                        <div class="avatar-circle">MP</div>
+                        <div class="meta">
+                            <h4>Meera Patel</h4>
+                            <p>Wedding Coordinator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <!-- Col 1: Company Info -->
+                <div class="footer-col">
+                    <div class="logo" style="color: white; margin-bottom: 1.5rem;">
+                        <img src="assets/images/logo.svg" alt="Oreplates Logo" loading="lazy" style="height: 45px;">
+                        <span style="font-weight: 700; font-size: 1.5rem; margin-left: 10px;">Oreplates</span>
+                    </div>
+                    <p style="opacity: 0.8; line-height: 1.8;">Pioneering the movement towards sustainable and elegant tableware. We transform fallen leaves into premium dinnerware for a greener planet.</p>
+                </div>
+
+                <!-- Col 2: Quick Navigation -->
+                <div class="footer-col footer-links">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Our Collection</a></li>
+                        <li><a href="gallery.html">Visual Gallery</a></li>
+                        <li><a href="about.html">About Our Journey</a></li>
+                        <li><a href="contact.html">Get In Touch</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Product Categories -->
+                <div class="footer-col footer-links">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="products.html">Round Plates</a></li>
+                        <li><a href="products.html">Square Plates</a></li>
+                        <li><a href="products.html">Partition Plates</a></li>
+                        <li><a href="products.html">Elegant Bowls</a></li>
+                        <li><a href="bulk-order.html">Bulk Orders</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact Info -->
+                <div class="footer-col" id="footer-contact-details">
+                    <h4>Connect Us</h4>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Sankarapuram, Kallakurichi,<br>Tamil Nadu – 606401</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <p>+91 76397 54311<br>+91 97860 80256</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>oreplates@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Bar -->
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; <span id="current-year">2026</span> Oreplates Tableware. Built with nature in mind. Developed by Creava Solution</p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Actions -->
+    <div class="floating-actions">
+        <a href="tel:+917639754311" class="float-btn call" id="float-call" title="Call Us"><i class="fas fa-phone-alt"></i></a>
+        <a href="https://wa.me/917639754311" class="float-btn whatsapp" id="float-wa" target="_blank" title="WhatsApp Enquiry"><i class="fab fa-whatsapp"></i></a>
+    </div>
+
+    <!-- Hidden Google Translate Element -->
+    <div id="google_translate_element" style="display:none"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript">
+        // Google Translate Initialization
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ta',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Hero Slider Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        
+        if (slides.length > 0) {
+            setInterval(nextSlide, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Gallery - Oreplates Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { display: flex; background: #f0f2f5; min-height: 100vh; }
+        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; z-index: 100; }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); text-decoration: none; color: white; opacity: 0.8; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); opacity: 1; }
+        
+        .gallery-admin-container { background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow); }
+        .upload-section { margin-bottom: 3rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 2rem; }
+        .upload-form { display: flex; flex-direction: column; gap: 1.5rem; }
+        
+        .drop-zone { border: 2px dashed #cbd5e0; border-radius: 12px; padding: 2rem; text-align: center; cursor: pointer; transition: 0.3s; background: #f8fafc; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--primary); background: #f0fdf4; }
+        .drop-zone i { font-size: 2.5rem; color: #a0aec0; margin-bottom: 1rem; }
+        .drop-zone p { color: #718096; margin-bottom: 0.5rem; }
+        .drop-zone small { color: #a0aec0; }
+        
+        .preview-container { display: none; margin-top: 1rem; position: relative; width: 150px; height: 150px; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); }
+        .preview-container img { width: 100%; height: 100%; object-fit: cover; }
+        .preview-container .remove-preview { position: absolute; top: 5px; right: 5px; background: rgba(0,0,0,0.6); color: white; border: none; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; font-size: 0.8rem; }
+        
+        .form-row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: flex-end; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; }
+        .form-control { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-family: inherit; }
+        
+        .upload-progress { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; display: none; margin-bottom: 1rem; }
+        .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        
+        /* ... existing drawer/card styles ... */
+        .grid-preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; }
+        .gallery-card { position: relative; border-radius: 12px; overflow: hidden; height: 200px; box-shadow: var(--shadow); border: 2px solid white; transition: 0.3s; }
+        .gallery-card img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-delete { position: absolute; top: 10px; right: 10px; background: rgba(239, 68, 68, 0.9); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; opacity: 0; }
+        .gallery-card:hover .btn-delete { opacity: 1; }
+        .gallery-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+        
+        .category-badge { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; text-transform: uppercase; }
+        
+        .btn-add { background: var(--primary); color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-add:hover { background: var(--primary-dark); }
+        
+        #toast { position: fixed; bottom: 2rem; right: 2rem; background: #1a202c; color: white; padding: 1rem 2rem; border-radius: 8px; display: none; z-index: 1000; box-shadow: var(--shadow-lg); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo" style="margin-bottom: 2.5rem; color: white;">
+            <img src="../assets/images/logo.svg" alt="Logo" style="filter: brightness(0) invert(1); height: 35px;">
+            <span>Oreplates Admin</span>
+        </div>
+        <a href="index.html" class="nav-item"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="products.html" class="nav-item"><i class="fas fa-box"></i> Products</a>
+        <a href="orders.html" class="nav-item"><i class="fas fa-shopping-cart"></i> Orders</a>
+        <a href="gallery.html" class="nav-item active"><i class="fas fa-images"></i> Gallery</a>
+        <a href="billing.html" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Offline Billing</a>
+        <a href="bulk-enquiries.html" class="nav-item"><i class="fas fa-envelope-open-text"></i> Bulk Enquiries</a>
+        <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="settings.html" class="nav-item"><i class="fas fa-cog"></i> Company Settings</a>
+    </div>
+
+    <div class="main-content">
+        <header style="margin-bottom: 2rem;">
+            <h1>Gallery Management</h1>
+            <p style="color: var(--text-muted);">Manage the visual showcase of your products and process.</p>
+        </header>
+
+        <div class="gallery-admin-container">
+            <div class="upload-section">
+                <form id="galleryForm" class="upload-form">
+                    <div class="drop-zone" id="dropZone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click or drag image here to upload</p>
+                        <small>JPG, PNG, JPEG (Automatically converted to WebP)</small>
+                        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg" style="display: none;">
+                    </div>
+                    
+                    <div id="previewContainer" class="preview-container">
+                        <img id="imagePreview" src="" alt="Preview">
+                        <button type="button" class="remove-preview" id="removePreview">&times;</button>
+                    </div>
+
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="imgCat" class="form-control">
+                                <option value="product">Product</option>
+                                <option value="process">Manufacturing Process</option>
+                                <option value="usage">Usage / Catering</option>
+                                <option value="lifestyle">Lifestyle</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-add" id="submitBtn"><i class="fas fa-plus"></i> Add Image</button>
+                    </div>
+                </form>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Uploaded Images (<span id="img-count">0</span>)</h2>
+            </div>
+            
+            <div class="grid-preview" id="galleryGrid">
+                <!-- Images will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Gallery Updated!</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="auth-check.js"></script>
+    <script>
+        const form = document.getElementById('galleryForm');
+        const grid = document.getElementById('galleryGrid');
+        const countSpan = document.getElementById('img-count');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const imagePreview = document.getElementById('imagePreview');
+        const removePreview = document.getElementById('removePreview');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressBar = document.getElementById('progressBar');
+        const uploadProgress = document.getElementById('uploadProgress');
+
+        let selectedFile = null;
+
+        // Load Gallery from Supabase
+        async function loadGallery() {
+            try {
+                const { data, error } = await window.supabaseInstance
+                    .from('gallery')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                renderGrid(data || []);
+            } catch (err) {
+                console.warn('Gallery load failed, switching to local:', err);
+                const localImages = JSON.parse(localStorage.getItem('admin_gallery') || '[]');
+                renderGrid(localImages);
+            }
+        }
+
+        function renderGrid(images) {
+            grid.innerHTML = '';
+            images.forEach(img => {
+                const card = document.createElement('div');
+                card.className = 'gallery-card';
+                card.innerHTML = `
+                    <img src="${img.url}" alt="Gallery Image">
+                    <div class="category-badge">${img.category}</div>
+                    <button class="btn-delete" onclick="deleteImage(${img.id}, '${img.url}')"><i class="fas fa-trash"></i></button>
+                `;
+                grid.appendChild(card);
+            });
+            countSpan.innerText = images.length;
+        }
+
+        // Drop Zone Handlers
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+        function handleFile(file) {
+            if (!file) return;
+            if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+                return alert('Please upload JPG, JPEG or PNG images only.');
+            }
+            selectedFile = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        removePreview.addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedFile = null;
+            previewContainer.style.display = 'none';
+            imagePreview.src = '';
+            fileInput.value = '';
+        });
+
+        // Convert to WebP using Canvas
+        async function convertToWebP(file) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    canvas.toBlob((blob) => {
+                        resolve(new File([blob], file.name.replace(/\.[^/.]+$/, "") + ".webp", { type: 'image/webp' }));
+                    }, 'image/webp', 0.8);
+                };
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!selectedFile) return alert('Please select an image first!');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            uploadProgress.style.display = 'block';
+            progressBar.style.width = '20%';
+
+            try {
+                // 1. Convert to WebP
+                const webpFile = await convertToWebP(selectedFile);
+                progressBar.style.width = '40%';
+
+                // 2. Upload to Supabase Storage
+                const fileName = `${Date.now()}-${webpFile.name}`;
+                const { data: uploadData, error: uploadError } = await window.supabaseInstance
+                    .storage
+                    .from('gallery')
+                    .upload(`gallery-images/${fileName}`, webpFile);
+
+                if (uploadError) throw uploadError;
+                progressBar.style.width = '70%';
+
+                // 3. Get Public URL
+                const { data: urlData } = window.supabaseInstance
+                    .storage
+                    .from('gallery')
+                    .getPublicUrl(`gallery-images/${fileName}`);
+                
+                const imageUrl = urlData.publicUrl;
+
+                // 4. Save to Database
+                const category = document.getElementById('imgCat').value;
+                const { data: dbData, error: dbError } = await window.supabaseInstance
+                    .from('gallery')
+                    .insert([{ 
+                        url: imageUrl, 
+                        category: category 
+                    }])
+                    .select();
+
+                if (dbError) throw dbError;
+
+                progressBar.style.width = '100%';
+                showToast('Image Uploaded Successfully!');
+                
+                // Reset form
+                selectedFile = null;
+                previewContainer.style.display = 'none';
+                form.reset();
+                loadGallery();
+
+            } catch (err) {
+                console.error(err);
+                alert('Upload failed: ' + err.message);
+                
+                // Fallback to local storage for demo if mock environment
+                if (err.message.includes('bucket')) {
+                    alert('Note: Storage bucket "gallery" not found. Please ensure it exists in your Supabase dashboard.');
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Image';
+                setTimeout(() => {
+                    uploadProgress.style.display = 'none';
+                    progressBar.style.width = '0%';
+                }, 1000);
+            }
+        });
+
+        window.deleteImage = async (id, url) => {
+            if (confirm('Are you sure you want to remove this image?')) {
+                try {
+                    // Delete from Database
+                    const { error: dbError } = await window.supabaseInstance
+                        .from('gallery')
+                        .delete()
+                        .eq('id', id);
+
+                    if (dbError) throw dbError;
+
+                    // Try to delete from storage if it's a supabase URL
+                    if (url.includes('supabase.co')) {
+                        const filePath = url.split('/storage/v1/object/public/gallery/')[1];
+                        if (filePath) {
+                            await window.supabaseInstance.storage.from('gallery').remove([filePath]);
+                        }
+                    }
+
+                    showToast('Image Removed!');
+                    loadGallery();
+                } catch (err) {
+                    console.error('Delete failed:', err);
+                    // Fallback filter for local storage demo
+                    let localImages = JSON.parse(localStorage.getItem('admin_gallery') || '[]');
+                    localImages = localImages.filter(img => img.id !== id);
+                    localStorage.setItem('admin_gallery', JSON.stringify(localImages));
+                    renderGrid(localImages);
+                }
+            }
+        };
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        window.addEventListener('load', loadGallery);
+    </script>
+</body>
+</html>

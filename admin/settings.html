@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Settings - Oreplates Admin</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { display: flex; background: #f0f2f5; min-height: 100vh; }
+        .sidebar { width: 260px; height: 100vh; background: var(--primary-dark); color: white; position: fixed; padding: 2rem 1rem; z-index: 100; }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 2rem; }
+        .nav-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; transition: var(--transition); text-decoration: none; color: white; opacity: 0.8; }
+        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); opacity: 1; }
+        
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .card { background: white; padding: 2rem; border-radius: 16px; box-shadow: var(--shadow); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text); }
+        .form-control { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e2e8f0; border-radius: 10px; font-family: inherit; }
+        
+        /* Invoice Preview */
+        .preview-pane { background: #f8fafc; border: 2px dashed #cbd5e0; border-radius: 16px; padding: 2rem; position: sticky; top: 2rem; }
+        .preview-header { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #718096; font-weight: 700; margin-bottom: 1.5rem; text-align: center; }
+        
+        .mini-invoice { background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-size: 0.8rem; }
+        .mini-inv-header { display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 1rem; margin-bottom: 1rem; }
+        .mini-logo { height: 30px; margin-bottom: 5px; }
+        
+        .btn-save { background: var(--primary); color: white; padding: 1rem 2rem; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: var(--transition); }
+        .btn-save:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-save:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        #toast { position: fixed; bottom: 2rem; right: 2rem; background: #166534; color: white; padding: 1rem 2rem; border-radius: 8px; display: none; z-index: 1000; box-shadow: var(--shadow-lg); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo" style="margin-bottom: 2.5rem; color: white;">
+            <img src="../assets/images/logo.svg" alt="Logo" style="filter: brightness(0) invert(1); height: 35px;">
+            <span style="font-weight: 700;">Oreplates Admin</span>
+        </div>
+        <a href="index.html" class="nav-item"><i class="fas fa-chart-line"></i> Dashboard</a>
+        <a href="products.html" class="nav-item"><i class="fas fa-box"></i> Products</a>
+        <a href="orders.html" class="nav-item"><i class="fas fa-shopping-cart"></i> Orders</a>
+        <a href="billing.html" class="nav-item"><i class="fas fa-file-invoice-dollar"></i> Offline Billing</a>
+        <a href="gallery.html" class="nav-item"><i class="fas fa-images"></i> Gallery</a>
+        <a href="bulk-enquiries.html" class="nav-item"><i class="fas fa-envelope-open-text"></i> Bulk Enquiries</a>
+        <a href="messages.html" class="nav-item"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="testimonials.html" class="nav-item"><i class="fas fa-comment-dots"></i> Testimonials</a>
+        <a href="settings.html" class="nav-item active"><i class="fas fa-cog"></i> Company Settings</a>
+        <div style="margin-top: auto;">
+             <a href="../index.html" class="nav-item"><i class="fas fa-external-link-alt"></i> View Site</a>
+             <a href="#" class="nav-item" style="color: #ff4d4d;" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header style="margin-bottom: 2rem;">
+            <h1>Company Settings</h1>
+            <p style="color: var(--text-muted);">Manage your company details for invoices and customer reach.</p>
+        </header>
+
+        <div class="settings-grid">
+            <div class="card">
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label>Company Display Name</label>
+                        <input type="text" id="compName" class="form-control" placeholder="Oreplates Sustainable Tableware">
+                    </div>
+                    <div class="form-group">
+                        <label>Company Logo URL</label>
+                        <input type="text" id="compLogo" class="form-control" placeholder="../assets/images/logo.svg">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Phone(s)</label>
+                        <input type="text" id="compPhone" class="form-control" placeholder="+91 76397 54311, +91 97860 80256">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="compEmail" class="form-control" placeholder="oreplates@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Office Address</label>
+                        <textarea id="compAddr" class="form-control" style="height: 100px;" placeholder="Full postal address..."></textarea>
+                    </div>
+                    <button type="submit" id="saveBtn" class="btn-save"><i class="fas fa-save"></i> Save Global Settings</button>
+                </form>
+            </div>
+
+            <div class="preview-pane">
+                <p class="preview-header">Live Invoice Header Preview</p>
+                <div class="mini-invoice">
+                    <div class="mini-inv-header">
+                        <div>
+                            <img src="../assets/images/logo.svg" alt="Logo" class="mini-logo" id="prevLogo">
+                            <h3 id="prevName" style="color: var(--primary); margin: 0; font-size: 1rem;">Oreplates</h3>
+                        </div>
+                        <div style="text-align: right; line-height: 1.4; color: #718096; font-size: 0.7rem;">
+                            <strong id="prevFullName">Company Name</strong><br>
+                            <span id="prevAddr">Office Address...</span><br>
+                            <span id="prevPhones">+91 XXXX XXX XXX</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                        <div>
+                            <p style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">Invoice To</p>
+                            <p><strong>Customer</strong></p>
+                        </div>
+                        <div style="text-align: right;">
+                            <p style="font-size: 0.6rem; color: #a0aec0; text-transform: uppercase;">Date</p>
+                            <p>March 10, 2026</p>
+                        </div>
+                    </div>
+                    <div style="background: #f1f5f9; height: 10px; border-radius: 4px; margin-bottom: 5px;"></div>
+                    <div style="background: #f1f5f9; height: 10px; border-radius: 4px; width: 70%; margin-bottom: 1rem;"></div>
+                    <div style="display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 0.5rem;">
+                         <span style="font-weight: 700; color: var(--primary);">Total Amount</span>
+                         <span style="font-weight: 700; color: var(--primary);">₹1,240</span>
+                    </div>
+                </div>
+                <p style="text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #718096;">Changes here will update the live website footer and bill receipts instantly.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Settings Saved Successfully!</div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="auth-check.js"></script>
+    <script>
+        const form = document.getElementById('settingsForm');
+        
+        async function loadSettings() {
+            try {
+                const { data, error } = await window.supabaseInstance
+                    .from('company_settings')
+                    .select('*')
+                    .eq('id', 1)
+                    .single();
+
+                if (error) throw error;
+                if (data) {
+                    document.getElementById('compName').value = data.name || '';
+                    document.getElementById('compLogo').value = data.logo_url || '';
+                    document.getElementById('compPhone').value = data.phone || '';
+                    document.getElementById('compEmail').value = data.email || '';
+                    document.getElementById('compAddr').value = data.address || '';
+                    updatePreview();
+                }
+            } catch (err) {
+                console.warn('Fetch error:', err);
+            }
+        }
+
+        function updatePreview() {
+            const nameVal = document.getElementById('compName').value;
+            document.getElementById('prevName').innerText = nameVal.split(' ')[0] || 'Oreplates';
+            document.getElementById('prevFullName').innerText = nameVal || 'Company Name';
+            document.getElementById('prevLogo').src = document.getElementById('compLogo').value || '../assets/images/logo.svg';
+            document.getElementById('prevAddr').innerText = document.getElementById('compAddr').value || 'Office Address';
+            document.getElementById('prevPhones').innerText = document.getElementById('compPhone').value.split(',')[0] || 'Phone';
+        }
+
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('input', updatePreview);
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving to Cloud...';
+
+            const payload = {
+                name: document.getElementById('compName').value,
+                logo_url: document.getElementById('compLogo').value,
+                phone: document.getElementById('compPhone').value,
+                email: document.getElementById('compEmail').value,
+                address: document.getElementById('compAddr').value
+            };
+
+            try {
+                const { error } = await window.supabaseInstance
+                    .from('company_settings')
+                    .update(payload)
+                    .eq('id', 1);
+
+                if (error) throw error;
+
+                // Also update local for continuity
+                localStorage.setItem('company_settings', JSON.stringify(payload));
+                
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => toast.style.display = 'none', 3000);
+            } catch (err) {
+                alert('Save failed: ' + err.message);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Global Settings';
+            }
+        });
+
+        window.addEventListener('load', loadSettings);
+    </script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details - Oreplates</title>
+    <!-- Performance Optimization -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" as="style">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <style>
+        .order-page-bg {
+            background-color: var(--accent);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 1.5rem;
+        }
+        .form-card {
+            background: var(--white);
+            border-radius: 32px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInScale 0.6s ease-out;
+        }
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .form-control {
+            border: 2px solid #eef2f1;
+            padding: 1rem;
+            border-radius: 12px;
+            width: 100%;
+            transition: var(--transition);
+        }
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(45, 90, 39, 0.1);
+        }
+        .price-summary-box {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px dashed #cbd5e1;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            color: var(--text-muted);
+        }
+        .summary-row.total {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+            color: var(--primary);
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="top-nav">
+        <div class="container nav-content">
+            <!-- Left Section -->
+            <div class="nav-left">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.svg" alt="Oreplates Logo" loading="eager">
+                    <span>Oreplates</span>
+                </a>
+                <a href="products.html" class="back-btn" style="margin-left: 1.5rem;">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Products</span>
+                </a>
+            </div>
+
+            <!-- Center Section -->
+            <div class="nav-center">
+                <div class="nav-links" id="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="products.html" class="active">Products</a>
+                    <a href="gallery.html">Gallery</a>
+                    <a href="bulk-order.html">Bulk Order</a>
+                    <a href="about.html">About</a>
+                    <div class="lang-switch mobile-only-lang">
+                        <button class="lang-btn active" onclick="translatePage('en')">English</button>
+                        <button class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Section -->
+            <div class="nav-right">
+                <div class="lang-switch desktop-only-lang">
+                    <button id="lang-en" class="lang-btn active" onclick="translatePage('en')">English</button>
+                    <button id="lang-ta" class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
+                </div>
+                <a href="contact.html" class="btn btn-primary">Contact</a>
+                <div class="menu-toggle" id="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="order-page-bg">
+        <div class="form-card" data-aos="zoom-in">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h1 style="color: var(--primary); font-size: 2.2rem; margin-bottom: 0.5rem;">Secure Your Plates</h1>
+                <p style="color: var(--text-muted); font-size: 1.05rem;">Fill the form to prepare your WhatsApp order message.</p>
+            </div>
+
+            <form id="orderDetailForm">
+                <!-- Product Section -->
+                <div style="margin-bottom: 2.5rem;">
+                    <div class="responsive-form-grid" style="margin-bottom: 1.5rem;">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" id="p-name" class="form-control" readonly style="background: #f8fafc; color: #64748b;">
+                        </div>
+                        <div class="form-group">
+                            <label>Size</label>
+                            <select id="p-size" class="form-control">
+                                <option value="12 Inch">12 Inch</option>
+                                <option value="10 Inch">10 Inch</option>
+                                <option value="8 Inch">8 Inch</option>
+                                <option value="6 Inch">6 Inch</option>
+                                <option value="4 Inch">4 Inch</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="responsive-form-grid">
+                        <div class="form-group">
+                            <label>Price per piece (₹)</label>
+                            <input type="text" id="p-price" class="form-control" readonly style="background: #f8fafc; color: #64748b;">
+                        </div>
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="number" id="p-qty" class="form-control" value="50" min="25" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Summary Box -->
+                <div class="price-summary-card">
+                    <div style="text-align: center; margin-bottom: 1rem; color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Order Summary</div>
+                    <div class="summary-row">
+                        <span>Price per piece</span>
+                        <span id="display-unit-price">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Quantity selected</span>
+                        <span id="display-qty">x 50</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span style="font-size: 1.1rem;">Total Price</span>
+                        <span id="display-total" style="font-size: 1.5rem;">₹0.00</span>
+                    </div>
+                </div>
+
+                <div style="height: 1.5px; background: #f1f5f9; margin: 2rem 0;"></div>
+
+                <!-- Customer Details -->
+                <div style="margin-bottom: 2rem;">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="c-name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="c-phone" class="form-control" placeholder="+91 XXXX XXX XXX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Delivery Address</label>
+                        <textarea id="c-address" class="form-control" placeholder="House no, Street name, Pincode" style="height: 100px;" required></textarea>
+                    </div>
+
+                    <div class="responsive-form-grid">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="c-city" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Pincode</label>
+                            <input type="text" id="c-pincode" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full" style="padding: 1.2rem; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 2rem; border-radius: 16px;">
+                    <i class="fab fa-whatsapp" style="font-size: 1.6rem;"></i> Order on WhatsApp
+                </button>
+                <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">You will be redirected to confirm the order details.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden Google Translate Element -->
+    <div id="google_translate_element" style="display:none"></div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script type="text/javascript">
+        // Google Translate Initialization
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ta',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        AOS.init();
+
+        // Language Translation Trigger
+        function translatePage(langCode) {
+            const googCombo = document.querySelector('.goog-te-combo');
+            if (googCombo) {
+                googCombo.value = langCode;
+                googCombo.dispatchEvent(new Event('change'));
+                
+                // Update button styles
+                document.querySelectorAll('.lang-btn').forEach(btn => {
+                    const text = btn.textContent.trim();
+                    if (langCode === 'en' && text.toLowerCase().includes('english')) {
+                        btn.classList.add('active');
+                    } else if (langCode === 'ta' && text.includes('தமிழ்')) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+            } else {
+                setTimeout(() => translatePage(langCode), 500);
+            }
+        }
+
+        // Mobile Menu Toggling
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.getElementById('nav-links');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                menuToggle.classList.toggle('menu-open');
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('product') || 'Selected Product';
+        const productSize = urlParams.get('size') || '10 Inch';
+        const productPrice = urlParams.get('price') || '12.00';
+
+        // Set Initial Values
+        const pNameField = document.getElementById('p-name');
+        const pPriceField = document.getElementById('p-price');
+        const pSizeField = document.getElementById('p-size');
+        const pQtyField = document.getElementById('p-qty');
+
+        if(pNameField) pNameField.value = productName;
+        if(pPriceField) pPriceField.value = `${productPrice}`;
+        if(pSizeField) pSizeField.value = productSize;
+
+        const displayUnitPrice = document.getElementById('display-unit-price');
+        const displayQty = document.getElementById('display-qty');
+        const displayTotal = document.getElementById('display-total');
+
+        function updateSummary() {
+            const price = parseFloat(pPriceField.value) || 0;
+            const qty = parseInt(pQtyField.value) || 0;
+            const total = (price * qty).toFixed(2);
+
+            if(displayUnitPrice) displayUnitPrice.innerText = `₹${price.toFixed(2)}`;
+            if(displayQty) displayQty.innerText = `x ${qty}`;
+            if(displayTotal) displayTotal.innerText = `₹${total}`;
+        }
+
+        if(pQtyField) {
+            pQtyField.addEventListener('input', updateSummary);
+            updateSummary();
+        }
+
+        document.getElementById('orderDetailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const prod = pNameField.value;
+            const size = pSizeField.value;
+            const qty = pQtyField.value;
+            const price = pPriceField.value;
+            const total = (parseFloat(price) * parseInt(qty)).toFixed(2);
+            
+            const name = document.getElementById('c-name').value;
+            const phone = document.getElementById('c-phone').value;
+            const address = document.getElementById('c-address').value;
+            const city = document.getElementById('c-city').value;
+            const pincode = document.getElementById('c-pincode').value;
+            
+            const message = encodeURIComponent(
+                `Hello Oreplates,\n\n` +
+                `*New Order Details*\n` +
+                `--------------------------\n` +
+                `*Product:* ${prod}\n` +
+                `*Size:* ${size}\n` +
+                `*Price per pc:* ₹${price}\n` +
+                `*Quantity:* ${qty}\n` +
+                `*Total Price:* ₹${total}\n\n` +
+                `*Customer Info*\n` +
+                `--------------------------\n` +
+                `*Name:* ${name}\n` +
+                `*Phone:* ${phone}\n` +
+                `*Address:* ${address},\n` +
+                `${city} - ${pincode}`
+            );
+            
+            // Redirect to WhatsApp
+            window.open(`https://wa.me/917639754311?text=${message}`, '_blank');
+        });
+    </script>
+</body>
+</html>
