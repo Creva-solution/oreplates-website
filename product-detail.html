@@ -78,12 +78,20 @@
                     
                     <p id="product-desc" style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">Our premium round plates are crafted from the highest quality areca leaf sheaths. They are stiff, leak-proof, and offer a unique natural texture for every plate.</p>
                     
-                    <div style="margin-bottom: 2rem;">
-                        <h4 style="margin-bottom: 1rem;">Available Sizes:</h4>
-                        <div id="product-sizes" style="display: flex; gap: 1rem;">
-                            <!-- Sizes will be loaded here -->
-                            <span style="padding: 0.5rem 1.5rem; border: 1px solid var(--primary); border-radius: 8px; font-weight: 600; color: var(--primary);">12 Inch</span>
-                            <span style="padding: 0.5rem 1.5rem; border: 1px solid #ddd; border-radius: 8px;">10 Inch</span>
+                    <div style="margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 2rem;">
+                        <div>
+                            <h4 style="margin-bottom: 1rem;">Available Sizes:</h4>
+                            <div id="product-sizes" style="display: flex; gap: 1rem;">
+                                <!-- Sizes will be loaded here -->
+                                <span style="padding: 0.5rem 1.5rem; border: 1px solid var(--primary); border-radius: 8px; font-weight: 600; color: var(--primary);">12 Inch</span>
+                                <span style="padding: 0.5rem 1.5rem; border: 1px solid #ddd; border-radius: 8px;">10 Inch</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 style="margin-bottom: 1rem;">Pack Includes:</h4>
+                            <div style="display: flex; gap: 1rem;">
+                                <span id="product-plate-count" style="padding: 0.5rem 1.5rem; border: 1px solid var(--primary); border-radius: 8px; font-weight: 600; color: var(--primary); background: #f0fdf4;">25 Plates</span>
+                            </div>
                         </div>
                     </div>
 
@@ -248,11 +256,16 @@
             const sizeElement = document.querySelector('#product-sizes span');
             const size = sizeElement ? sizeElement.innerText : '10 Inch';
             
-            // Mock price for the detail page demo
+            // Mock price and plate count for the detail page demo
             let price = "12.00";
-            if (productName.includes("Round Plate")) price = "12.00";
-            if (productName.includes("Square Plate")) price = "14.50";
-            if (productName.includes("Bowl")) price = "6.50";
+            let plateCount = "25";
+            if (productName.includes("Round Plate")) { price = "12.00"; plateCount = "25"; }
+            if (productName.includes("Square Plate")) { price = "14.50"; plateCount = "25"; }
+            if (productName.includes("Partition Plate")) { price = "20.00"; plateCount = "20"; }
+            if (productName.includes("Bowl")) { price = "6.50"; plateCount = "50"; }
+            
+            const plateCountSpan = document.getElementById('product-plate-count');
+            if (plateCountSpan) plateCountSpan.innerText = `${plateCount} Plates`;
 
             const orderBtn = document.getElementById('order-btn-link');
             if (orderBtn) {

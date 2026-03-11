@@ -4,6 +4,7 @@ const defaultProducts = [
         id: 1,
         name: 'Round Plate - 12 Inch',
         size: '12 Inch',
+        plateCount: 25,
         description: 'Perfect for main courses and buffet meals.',
         category: 'Plates',
         image: 'assets/images/plate-round-12.png',
@@ -17,6 +18,7 @@ const defaultProducts = [
         id: 2,
         name: 'Square Plate - 10 Inch',
         size: '10 Inch',
+        plateCount: 25,
         description: 'Modern and stylish square design for elegant dining.',
         category: 'Plates',
         image: 'assets/images/plate-square.png',
@@ -30,6 +32,7 @@ const defaultProducts = [
         id: 3,
         name: 'Partition Plate',
         size: '12 Inch',
+        plateCount: 20,
         description: 'Ideal for meals with multiple components or traditional dining.',
         category: 'Plates',
         image: 'assets/images/plate-partition.png',
@@ -43,6 +46,7 @@ const defaultProducts = [
         id: 4,
         name: 'Round Bowl - 4 Inch',
         size: '4 Inch',
+        plateCount: 50,
         description: 'Great for soups, desserts, or side dishes.',
         category: 'Bowls',
         image: 'assets/images/round.png',
@@ -78,6 +82,7 @@ async function renderProducts(filter = 'All') {
                 id: p.id,
                 name: p.name,
                 size: p.size,
+                plateCount: p.plate_count,
                 description: p.description,
                 category: p.category,
                 image: p.image_url || 'assets/images/logo.svg',
@@ -126,7 +131,8 @@ async function renderProducts(filter = 'All') {
                     <h3 style="margin: 0; font-size: 1.25rem; color: var(--text); line-height: 1.3;">${product.name}</h3>
                     
                     <!-- Size Information -->
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0 1rem;">Available Size: ${product.size}</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0 0.2rem;">Available Size: ${product.size}</p>
+                    ${product.plateCount ? `<p style="color: var(--text-muted); font-size: 0.85rem; margin: 0 0 1rem; font-weight: 600;">Pack: ${product.plateCount} Plates</p>` : `<div style="height: 1rem; margin-bottom: 1rem;"></div>`}
                     
                     ${hasOffer ? '<span class="special-offer-lbl" style="align-self: flex-start;">Special Offer</span>' : ''}
                     
