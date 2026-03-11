@@ -144,6 +144,7 @@ async function renderProducts(filter = 'All') {
                         ` : `
                             <span class="offer-price" style="font-size: 1.4rem; color: var(--primary); font-weight: 800;">₹${product.originalPrice.toFixed(0)}</span>
                         `}
+                        <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">per plate</span>
                     </div>
 
                     <!-- Action Buttons -->
