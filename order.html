@@ -336,7 +336,7 @@
                 
             } catch (err) {
                 console.error('Order saving error:', err);
-                alert('There was a problem sending your order. Please try again or contact us directly.');
+                alert('Order Failed: ' + (err.message || 'Unknown error') + '\n\nIf this persists, please contact support.');
             } finally {
                 orderBtn.disabled = false;
                 orderBtn.innerHTML = originalContent;
