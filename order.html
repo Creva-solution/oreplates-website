@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" media="print" onload="this.media='all'">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
     <style>
         .order-page-bg {
             background-color: var(--accent);
@@ -204,7 +206,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-full" style="padding: 1.2rem; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 2rem; border-radius: 16px;">
+                <button type="submit" id="orderBtn" class="btn btn-primary btn-full" style="padding: 1.2rem; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 2rem; border-radius: 16px;">
                     <i class="fab fa-whatsapp" style="font-size: 1.6rem;"></i> Order on WhatsApp
                 </button>
                 <p style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">You will be redirected to confirm the order details.</p>
@@ -269,8 +271,15 @@
             updateSummary();
         }
 
-        document.getElementById('orderDetailForm').addEventListener('submit', function(e) {
+        document.getElementById('orderDetailForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            const orderBtn = document.getElementById('orderBtn');
+            const originalContent = orderBtn.innerHTML;
+            
+            // Show Loading State
+            orderBtn.disabled = true;
+            orderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
             
             const prod = pNameField.value;
             const size = pSizeField.value;
@@ -284,27 +293,54 @@
             const city = document.getElementById('c-city').value;
             const pincode = document.getElementById('c-pincode').value;
             
-            const message = encodeURIComponent(
-                `Hello Oreplates,\n\n` +
-                `*NEW ORDER DETAILS*\n` +
-                `--------------------------\n` +
-                `*Product:* ${prod}\n` +
-                `*Size:* ${size}\n` +
-                `*Items per Pack:* ${plateCount} Plates\n` +
-                `*Price per Pack:* ₹${price}\n` +
-                `*Number of Packs:* ${qty}\n` +
-                `*Total Quantity (Plates):* ${parseInt(qty) * parseInt(plateCount)}\n` +
-                `*Total Amount:* ₹${total}\n\n` +
-                `*CUSTOMER INFORMATION*\n` +
-                `--------------------------\n` +
-                `*Name:* ${name}\n` +
-                `*Phone:* ${phone}\n` +
-                `*Shipping Address:* ${address},\n` +
-                `${city} - ${pincode}`
-            );
-            
-            // Redirect to WhatsApp
-            window.open(`https://wa.me/917639754311?text=${message}`, '_blank');
+            const fullAddress = `${address}, ${city} - ${pincode}`;
+
+            try {
+                // 1. Save to Admin Panel (Supabase)
+                const { error: dbError } = await window.supabaseInstance
+                    .from('orders')
+                    .insert([{
+                        product_name: `${prod} (${size})`,
+                        quantity: parseInt(qty),
+                        unit_price: parseFloat(price),
+                        total_amount: parseFloat(total),
+                        customer_name: name,
+                        customer_phone: phone,
+                        customer_address: fullAddress,
+                        status: 'Pending'
+                    }]);
+
+                if (dbError) throw dbError;
+
+                // 2. Prepare WhatsApp Message
+                const message = encodeURIComponent(
+                    `Hello Oreplates,\n\n` +
+                    `*NEW ORDER DETAILS*\n` +
+                    `--------------------------\n` +
+                    `*Product:* ${prod}\n` +
+                    `*Size:* ${size}\n` +
+                    `*Items per Pack:* ${plateCount} Plates\n` +
+                    `*Price per Pack:* ₹${price}\n` +
+                    `*Number of Packs:* ${qty}\n` +
+                    `*Total Quantity (Plates):* ${parseInt(qty) * parseInt(plateCount)}\n` +
+                    `*Total Amount:* ₹${total}\n\n` +
+                    `*CUSTOMER INFORMATION*\n` +
+                    `--------------------------\n` +
+                    `*Name:* ${name}\n` +
+                    `*Phone:* ${phone}\n` +
+                    `*Shipping Address:* ${fullAddress}`
+                );
+                
+                // 3. Redirect to WhatsApp
+                window.open(`https://wa.me/917639754311?text=${message}`, '_blank');
+                
+            } catch (err) {
+                console.error('Order saving error:', err);
+                alert('There was a problem sending your order. Please try again or contact us directly.');
+            } finally {
+                orderBtn.disabled = false;
+                orderBtn.innerHTML = originalContent;
+            }
         });
     </script>
 </body>

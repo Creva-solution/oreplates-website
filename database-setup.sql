@@ -47,3 +47,25 @@ CREATE POLICY "Public can view testimonials" ON public.testimonials FOR SELECT U
 
 DROP POLICY IF EXISTS "Admins can manage testimonials" ON public.testimonials;
 CREATE POLICY "Admins can manage testimonials" ON public.testimonials FOR ALL USING (auth.role() = 'authenticated');
+
+-- 6. Orders Table Setup
+CREATE TABLE IF NOT EXISTS public.orders (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    product_name TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    unit_price NUMERIC NOT NULL,
+    total_amount NUMERIC NOT NULL,
+    customer_name TEXT NOT NULL,
+    customer_phone TEXT NOT NULL,
+    customer_address TEXT NOT NULL,
+    status TEXT DEFAULT 'Pending'
+);
+
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public can insert orders" ON public.orders;
+CREATE POLICY "Public can insert orders" ON public.orders FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Admins can view and manage orders" ON public.orders;
+CREATE POLICY "Admins can view and manage orders" ON public.orders FOR ALL USING (auth.role() = 'authenticated');
