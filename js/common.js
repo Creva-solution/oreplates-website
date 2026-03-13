@@ -1,34 +1,72 @@
-// Language Translation Trigger
+// Language Translation Trigger using Cookies
 function translatePage(langCode) {
-    const googCombo = document.querySelector('.goog-te-combo');
-    if (googCombo) {
-        googCombo.value = langCode;
-        googCombo.dispatchEvent(new Event('change'));
-        
-        // Update button styles
-        document.querySelectorAll('.lang-btn').forEach(btn => {
-            const text = btn.textContent.trim().toUpperCase();
-            if (langCode === 'en' && (text.includes('ENGLISH') || text === 'EN')) {
-                btn.classList.add('active');
-            } else if (langCode === 'ta' && (text.includes('தமிழ்') || text === 'TA')) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-        
-        // Save preference
-        localStorage.setItem('preferredLanguage', langCode);
-    } else {
-        setTimeout(() => translatePage(langCode), 500);
-    }
+    // 1. Set Google Translate Cookie aggressively
+    const host = window.location.hostname;
+    const cookieValue = `/en/${langCode}`;
+    
+    // Domain variants for broad coverage
+    const domains = [host, `www.${host}`];
+    const parts = host.split('.');
+    if (parts.length >= 2) domains.push(`.${parts.slice(-2).join('.')}`);
+    
+    domains.forEach(d => {
+        document.cookie = `googtrans=${cookieValue}; path=/; domain=${d};`;
+        if (d.startsWith('.')) {
+             document.cookie = `googtrans=${cookieValue}; path=/; domain=${d.substring(1)};`;
+        }
+    });
+    document.cookie = `googtrans=${cookieValue}; path=/;`;
+    
+    // 2. Save Preference locally
+    localStorage.setItem('preferredLanguage', langCode);
+    
+    // 3. Immediately update UI for feedback
+    updateLangUI(langCode);
+
+    // 4. Reload page WITH a URL parameter to force it in case cookies fail (especially on local/unsecured sites)
+    const url = new URL(window.location.href);
+    url.searchParams.set('lang', langCode);
+    window.location.href = url.toString();
 }
 
-// Initialize translation based on saved preference
-window.addEventListener('load', () => {
-    const savedLang = localStorage.getItem('preferredLanguage');
-    if (savedLang && savedLang !== 'en') {
-        setTimeout(() => translatePage(savedLang), 1500);
+function updateLangUI(langCode) {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        const text = btn.textContent.trim().toUpperCase();
+        if (langCode === 'en' && (text.includes('ENGLISH') || text === 'EN')) {
+            btn.classList.add('active');
+        } else if (langCode === 'ta' && (text.includes('தமிழ்') || text === 'TA')) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+// Initialize translation styling and force check on load
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URL(window.location.href).searchParams;
+    const urlLang = urlParams.get('lang');
+    const savedLang = urlLang || localStorage.getItem('preferredLanguage') || 'en';
+    
+    if (urlLang) {
+        localStorage.setItem('preferredLanguage', urlLang);
+    }
+
+    updateLangUI(savedLang);
+
+    // Polling: Force update the Google Translate widget if it appears
+    if (savedLang !== 'en') {
+        const interval = setInterval(() => {
+            const combo = document.querySelector('.goog-te-combo');
+            if (combo) {
+                if (combo.value !== savedLang) {
+                    combo.value = savedLang;
+                    combo.dispatchEvent(new Event('change'));
+                }
+                clearInterval(interval);
+            }
+        }, 300);
+        setTimeout(() => clearInterval(interval), 10000); // 10s polling for slow connections
     }
 });
 
@@ -140,6 +178,23 @@ document.addEventListener('DOMContentLoaded', () => {
             if (floatCall) floatCall.href = `tel:${primaryPhone}`;
             if (floatWa) floatWa.href = `https://wa.me/${primaryPhone}`;
         }
+        
+        // Update Brand Logo
+        if (settings.logo_url) {
+            document.querySelectorAll('.logo img').forEach(img => {
+                img.src = settings.logo_url;
+            });
+            // Update Favicon
+            let favicon = document.querySelector('link[rel="icon"]');
+            if (favicon) {
+                favicon.href = settings.logo_url;
+            } else {
+                favicon = document.createElement('link');
+                favicon.rel = 'icon';
+                favicon.href = settings.logo_url;
+                document.head.appendChild(favicon);
+            }
+        }
     }
 
     applyCompanySettings();
@@ -154,13 +209,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Google Translate Initialization (Moved to global for all pages)
+// Google Translate Initialization
 function googleTranslateElementInit() {
+    // Ensure the container exists
+    let container = document.getElementById('google_translate_element');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'google_translate_element';
+        container.style.display = 'none';
+        document.body.appendChild(container);
+    }
+
     new google.translate.TranslateElement({
         pageLanguage: 'en',
-        includedLanguages: 'en,ta',
+        includedLanguages: 'ta,en',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: false
+        autoDisplay: true // Changed to true to help it catch the cookie
     }, 'google_translate_element');
 }
 
@@ -169,7 +233,8 @@ function googleTranslateElementInit() {
     if (!document.querySelector('script[src*="translate.google.com"]')) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
+        script.async = true;
         script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        document.body.appendChild(script);
+        document.head.appendChild(script);
     }
 })();

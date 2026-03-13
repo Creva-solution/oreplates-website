@@ -1,64 +1,5 @@
 // Product Data and UI Logic
-const defaultProducts = [
-    {
-        id: 1,
-        name: 'Round Plate - 12 Inch',
-        size: '12 Inch',
-        plateCount: 25,
-        description: 'Perfect for main courses and buffet meals.',
-        category: 'Plates',
-        image: 'assets/images/plate-round-12.png',
-        sizes: ['12 Inch', '10 Inch', '8 Inch'],
-        originalPrice: 15.00,
-        offerPrice: 12.00,
-        enableOffer: true,
-        inStock: true
-    },
-    {
-        id: 2,
-        name: 'Square Plate - 10 Inch',
-        size: '10 Inch',
-        plateCount: 25,
-        description: 'Modern and stylish square design for elegant dining.',
-        category: 'Plates',
-        image: 'assets/images/plate-square.png',
-        sizes: ['10 Inch', '8 Inch', '6 Inch'],
-        originalPrice: 18.00,
-        offerPrice: 14.50,
-        enableOffer: true,
-        inStock: true
-    },
-    {
-        id: 3,
-        name: 'Partition Plate',
-        size: '12 Inch',
-        plateCount: 20,
-        description: 'Ideal for meals with multiple components or traditional dining.',
-        category: 'Plates',
-        image: 'assets/images/plate-partition.png',
-        sizes: ['12 Inch (3-Comp)', '12 Inch (4-Comp)'],
-        originalPrice: 22.00,
-        offerPrice: 20.00,
-        enableOffer: false,
-        inStock: false
-    },
-    {
-        id: 4,
-        name: 'Round Bowl - 4 Inch',
-        size: '4 Inch',
-        plateCount: 50,
-        description: 'Great for soups, desserts, or side dishes.',
-        category: 'Bowls',
-        image: 'assets/images/round.png',
-        sizes: ['4 Inch', '5 Inch'],
-        originalPrice: 8.00,
-        offerPrice: 6.50,
-        enableOffer: true,
-        inStock: true
-    }
-];
-
-const products = JSON.parse(localStorage.getItem('oreplates_products')) || defaultProducts;
+// Product Data and UI Logic
 
 async function renderProducts(filter = 'All') {
     const container = document.getElementById('products-grid');
@@ -89,23 +30,31 @@ async function renderProducts(filter = 'All') {
                 originalPrice: parseFloat(p.price),
                 offerPrice: p.discount_percent > 0 ? p.price * (1 - p.discount_percent/100) : null,
                 enableOffer: p.discount_percent > 0,
+                discountPercent: p.discount_percent || 0,
                 inStock: !p.is_out_of_stock
             }));
-        } else {
-            productsList = defaultProducts;
         }
     } catch (err) {
-        console.error('Supabase fetch failed, falling back to local data:', err);
-        productsList = JSON.parse(localStorage.getItem('oreplates_products')) || defaultProducts;
+        console.error('Supabase fetch failed:', err);
     }
 
     container.innerHTML = '';
+    
+    if (productsList.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: #64748b;"><i class="fas fa-box-open fa-3x" style="color: #cbd5e1; margin-bottom: 1rem;"></i><h3 style="font-size: 1.5rem; color: var(--primary-dark);">Products coming soon</h3><p>We are currently updating our catalog.</p></div>';
+        return;
+    }
+
     const filtered = filter === 'All' ? productsList : productsList.filter(p => p.category === filter);
 
     filtered.forEach(product => {
         const hasOffer = product.enableOffer && product.offerPrice;
-        const discountPercent = hasOffer ? Math.round(((product.originalPrice - product.offerPrice) / product.originalPrice) * 100) : 0;
+        const discountPercent = product.discountPercent || (hasOffer ? Math.round(((product.originalPrice - product.offerPrice) / product.originalPrice) * 100) : 0);
         const isOutOfStock = product.inStock === false;
+
+        const packMultiplier = product.plateCount || 1;
+        const packOriginalPrice = product.originalPrice * packMultiplier;
+        const packOfferPrice = product.offerPrice ? product.offerPrice * packMultiplier : null;
 
         const card = `
             <div class="product-card ${isOutOfStock ? 'out-of-stock' : ''}" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); position: relative; height: 100%; display: flex; flex-direction: column;" data-aos="fade-up">
@@ -139,12 +88,11 @@ async function renderProducts(filter = 'All') {
                     <!-- Price Section (One Line) -->
                     <div class="price-section" style="margin-bottom: 1.5rem; display: flex; align-items: baseline; gap: 8px;">
                         ${hasOffer ? `
-                            <span class="offer-price" style="font-size: 1.4rem; color: var(--primary); font-weight: 800;">₹${product.offerPrice.toFixed(0)}</span>
-                            <span class="original-price" style="font-size: 0.95rem; color: var(--text-muted); text-decoration: line-through; opacity: 0.6;">₹${product.originalPrice.toFixed(0)}</span>
+                            <span class="offer-price" style="font-size: 1.4rem; color: var(--primary); font-weight: 800;">₹${packOfferPrice.toFixed(2).replace(/\.00$/, '')}</span>
+                            <span class="original-price" style="font-size: 0.95rem; color: var(--text-muted); text-decoration: line-through; opacity: 0.6;">₹${packOriginalPrice.toFixed(2).replace(/\.00$/, '')}</span>
                         ` : `
-                            <span class="offer-price" style="font-size: 1.4rem; color: var(--primary); font-weight: 800;">₹${product.originalPrice.toFixed(0)}</span>
+                            <span class="offer-price" style="font-size: 1.4rem; color: var(--primary); font-weight: 800;">₹${packOriginalPrice.toFixed(2).replace(/\.00$/, '')}</span>
                         `}
-                        <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">per plate</span>
                     </div>
 
                     <!-- Action Buttons -->
@@ -152,7 +100,7 @@ async function renderProducts(filter = 'All') {
                         <a href="product-detail.html?id=${product.id}" class="btn btn-outline" style="flex: 1;">Details</a>
                         ${isOutOfStock ? 
                             `<button class="btn" disabled style="flex: 1; background: #cbd5e1; color: #64748b; cursor: not-allowed;">Unavailable</button>` :
-                            `<a href="order.html?product=${encodeURIComponent(product.name)}&size=${encodeURIComponent(product.size)}&price=${hasOffer ? product.offerPrice : product.originalPrice}" class="btn btn-primary" style="flex: 1;">Order Now</a>`
+                            `<a href="order.html?product=${encodeURIComponent(product.name)}&size=${encodeURIComponent(product.size)}&price=${hasOffer ? packOfferPrice : packOriginalPrice}&pack=${product.plateCount}" class="btn btn-primary" style="flex: 1;">Order Now</a>`
                         }
                     </div>
                 </div>

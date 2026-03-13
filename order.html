@@ -90,17 +90,13 @@
                     <a href="gallery.html">Gallery</a>
                     <a href="bulk-order.html">Bulk Order</a>
                     <a href="about.html">About</a>
-                    <div class="lang-switch mobile-only-lang">
-                        <button class="lang-btn active" onclick="translatePage('en')">English</button>
-                        <button class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
-                    </div>
                 </div>
             </div>
             
             <!-- Right Section -->
             <div class="nav-right">
-                <div class="lang-switch desktop-only-lang">
-                    <button id="lang-en" class="lang-btn active" onclick="translatePage('en')">English</button>
+                <div class="lang-switch">
+                    <button id="lang-en" class="lang-btn active" onclick="translatePage('en')">EN</button>
                     <button id="lang-ta" class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
                 </div>
                 <a href="contact.html" class="btn btn-primary">Contact</a>
@@ -142,12 +138,12 @@
 
                     <div class="responsive-form-grid">
                         <div class="form-group">
-                            <label>Price per Plate (₹)</label>
+                            <label>Pack Price (₹)</label>
                             <input type="text" id="p-price" class="form-control" readonly style="background: #f8fafc; color: #64748b;">
                         </div>
                         <div class="form-group">
-                            <label>Quantity (Number of Plates)</label>
-                            <input type="number" id="p-qty" class="form-control" value="50" min="25" required>
+                            <label>Quantity (Packs)</label>
+                            <input type="number" id="p-qty" class="form-control" value="1" min="1" required>
                         </div>
                     </div>
                 </div>
@@ -156,12 +152,12 @@
                 <div class="price-summary-card">
                     <div style="text-align: center; margin-bottom: 1rem; color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Order Summary</div>
                     <div class="summary-row">
-                        <span>Price per Plate</span>
+                        <span>Price per Pack</span>
                         <span id="display-unit-price">₹0.00</span>
                     </div>
                     <div class="summary-row">
-                        <span>Number of Plates</span>
-                        <span id="display-qty">x 50</span>
+                        <span>Number of Packs</span>
+                        <span id="display-qty">x 1</span>
                     </div>
                     <div class="summary-row total">
                         <span style="font-size: 1.1rem;">Total Price</span>
@@ -208,48 +204,10 @@
         </div>
     </div>
 
-    <!-- Hidden Google Translate Element -->
-    <div id="google_translate_element" style="display:none"></div>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="text/javascript">
-        // Google Translate Initialization
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,ta',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+    <script src="js/common.js"></script>
     <script>
         AOS.init();
-
-        // Language Translation Trigger
-        function translatePage(langCode) {
-            const googCombo = document.querySelector('.goog-te-combo');
-            if (googCombo) {
-                googCombo.value = langCode;
-                googCombo.dispatchEvent(new Event('change'));
-                
-                // Update button styles
-                document.querySelectorAll('.lang-btn').forEach(btn => {
-                    const text = btn.textContent.trim();
-                    if (langCode === 'en' && text.toLowerCase().includes('english')) {
-                        btn.classList.add('active');
-                    } else if (langCode === 'ta' && text.includes('தமிழ்')) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-            } else {
-                setTimeout(() => translatePage(langCode), 500);
-            }
-        }
 
         // Mobile Menu Toggling
         const menuToggle = document.getElementById('menu-toggle');
@@ -317,8 +275,8 @@
                 `--------------------------\n` +
                 `*Product:* ${prod}\n` +
                 `*Size:* ${size}\n` +
-                `*Price per Plate:* ₹${price}\n` +
-                `*Number of Plates:* ${qty}\n` +
+                `*Price per Pack:* ₹${price}\n` +
+                `*Number of Packs:* ${qty}\n` +
                 `*Total Price:* ₹${total}\n\n` +
                 `*Customer Info*\n` +
                 `--------------------------\n` +

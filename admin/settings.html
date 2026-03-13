@@ -59,8 +59,9 @@
                         <input type="text" id="compName" class="form-control" placeholder="Oreplates">
                     </div>
                     <div class="form-group">
-                        <label>Company Logo URL</label>
-                        <input type="text" id="compLogo" class="form-control" placeholder="../assets/images/logo.svg">
+                        <label>Company Logo Upload (JPG/PNG)</label>
+                        <input type="file" id="compLogoFile" accept="image/png, image/jpeg" class="form-control" style="padding: 0.5rem;">
+                        <input type="hidden" id="compLogo" placeholder="../assets/images/logo.svg">
                     </div>
                     <div class="form-group">
                         <label>Contact Phone(s)</label>
@@ -159,21 +160,53 @@
             input.addEventListener('input', updatePreview);
         });
 
+        let selectedLogoFile = null;
+        document.getElementById('compLogoFile').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                selectedLogoFile = file;
+                const reader = new FileReader();
+                reader.onload = (ev) => {
+                    document.getElementById('prevLogo').src = ev.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const saveBtn = document.getElementById('saveBtn');
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving to Cloud...';
 
-            const payload = {
+            let logoUrl = document.getElementById('compLogo').value;
+
+            try {
+                if (selectedLogoFile) {
+                    const fileName = `logo-${Date.now()}-${selectedLogoFile.name}`;
+                    const { data: uploadData, error: uploadError } = await window.supabaseInstance
+                        .storage
+                        .from('uploads')
+                        .upload(`company/${fileName}`, selectedLogoFile);
+
+                    if (uploadError) throw uploadError;
+
+                    const { data: urlData } = window.supabaseInstance
+                        .storage
+                        .from('uploads')
+                        .getPublicUrl(`company/${fileName}`);
+                    
+                    logoUrl = urlData.publicUrl;
+                    document.getElementById('compLogo').value = logoUrl;
+                }
+
+                const payload = {
                 name: document.getElementById('compName').value,
-                logo_url: document.getElementById('compLogo').value,
+                logo_url: logoUrl,
                 phone: document.getElementById('compPhone').value,
                 email: document.getElementById('compEmail').value,
                 address: document.getElementById('compAddr').value
             };
-
-            try {
                 const { error } = await window.supabaseInstance
                     .from('company_settings')
                     .update(payload)

@@ -35,17 +35,13 @@
                     <a href="gallery.html">Gallery</a>
                     <a href="bulk-order.html">Bulk Order</a>
                     <a href="about.html">About</a>
-                    <div class="lang-switch mobile-only-lang">
-                        <button class="lang-btn active" onclick="translatePage('en')">English</button>
-                        <button class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
-                    </div>
                 </div>
             </div>
             
             <!-- Right Section -->
             <div class="nav-right">
-                <div class="lang-switch desktop-only-lang">
-                    <button id="lang-en" class="lang-btn active" onclick="translatePage('en')">English</button>
+                <div class="lang-switch">
+                    <button id="lang-en" class="lang-btn active" onclick="translatePage('en')">EN</button>
                     <button id="lang-ta" class="lang-btn" onclick="translatePage('ta')">தமிழ்</button>
                 </div>
                 <a href="contact.html" class="btn btn-primary">Contact</a>
@@ -173,7 +169,7 @@
             <!-- Footer Bottom Bar -->
             <div class="footer-bottom">
                 <div class="footer-bottom-content">
-                    <p>&copy; <span id="current-year">2026</span> Oreplates Tableware. Built with nature in mind. Developed by Creava Solution</p>
+                    <p>&copy; <span id="current-year">2026</span> Oreplates Tableware. Built with nature in mind. Developed by <a href="https://crevasolution.in" target="_blank" style="color: inherit; text-decoration: underline;">crevasolution.in</a></p>
                     <div class="footer-social">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
@@ -191,59 +187,10 @@
         <a href="https://wa.me/917639754311" class="float-btn whatsapp" target="_blank" title="WhatsApp Enquiry"><i class="fab fa-whatsapp"></i></a>
     </div>
 
-    <!-- Hidden Google Translate Element -->
-    <div id="google_translate_element" style="display:none"></div>
-
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script type="text/javascript">
-        // Google Translate Initialization
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,ta',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
+    <script src="js/common.js"></script>
     <script>
         AOS.init({ duration: 800, once: true });
-
-        // Language Translation Trigger
-        function translatePage(langCode) {
-            const googCombo = document.querySelector('.goog-te-combo');
-            if (googCombo) {
-                googCombo.value = langCode;
-                googCombo.dispatchEvent(new Event('change'));
-                
-                // Update button styles
-                document.querySelectorAll('.lang-btn').forEach(btn => {
-                    const text = btn.textContent.trim();
-                    if (langCode === 'en' && text.toLowerCase().includes('english')) {
-                        btn.classList.add('active');
-                    } else if (langCode === 'ta' && text.includes('தமிழ்')) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-            } else {
-                setTimeout(() => translatePage(langCode), 500);
-            }
-        }
-
-        // Mobile Menu Toggling
-        const menuToggle = document.getElementById('menu-toggle');
-        const navLinks = document.getElementById('nav-links');
-
-        if (menuToggle && navLinks) {
-            menuToggle.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-                menuToggle.classList.toggle('menu-open');
-            });
-        }
 
         // Dynamic Copyright Year
         const yearEl = document.getElementById('current-year');
@@ -257,19 +204,21 @@
             const size = sizeElement ? sizeElement.innerText : '10 Inch';
             
             // Mock price and plate count for the detail page demo
-            let price = "12.00";
-            let plateCount = "25";
-            if (productName.includes("Round Plate")) { price = "12.00"; plateCount = "25"; }
-            if (productName.includes("Square Plate")) { price = "14.50"; plateCount = "25"; }
-            if (productName.includes("Partition Plate")) { price = "20.00"; plateCount = "20"; }
-            if (productName.includes("Bowl")) { price = "6.50"; plateCount = "50"; }
+            let perPlatePrice = 12.00;
+            let plateCount = 25;
+            if (productName.includes("Round Plate")) { perPlatePrice = 12.00; plateCount = 25; }
+            if (productName.includes("Square Plate")) { perPlatePrice = 14.50; plateCount = 25; }
+            if (productName.includes("Partition Plate")) { perPlatePrice = 20.00; plateCount = 20; }
+            if (productName.includes("Bowl")) { perPlatePrice = 6.50; plateCount = 50; }
+            
+            const packPrice = (perPlatePrice * plateCount).toFixed(2).replace(/\.00$/, '');
             
             const plateCountSpan = document.getElementById('product-plate-count');
             if (plateCountSpan) plateCountSpan.innerText = `${plateCount} Plates`;
 
             const orderBtn = document.getElementById('order-btn-link');
             if (orderBtn) {
-                orderBtn.href = `order.html?product=${encodeURIComponent(productName)}&size=${encodeURIComponent(size)}&price=${price}`;
+                orderBtn.href = `order.html?product=${encodeURIComponent(productName)}&size=${encodeURIComponent(size)}&price=${packPrice}&pack=${plateCount}`;
             }
         });
     </script>
