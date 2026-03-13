@@ -28,3 +28,22 @@ CREATE POLICY "Admins can delete products"
 ON public.products 
 FOR DELETE 
 USING (auth.role() = 'authenticated');
+
+-- 5. Testimonials Table Setup
+CREATE TABLE IF NOT EXISTS public.testimonials (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    name TEXT NOT NULL,
+    title TEXT,
+    rating INTEGER DEFAULT 5,
+    review TEXT,
+    avatar_url TEXT
+);
+
+ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public can view testimonials" ON public.testimonials;
+CREATE POLICY "Public can view testimonials" ON public.testimonials FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Admins can manage testimonials" ON public.testimonials;
+CREATE POLICY "Admins can manage testimonials" ON public.testimonials ALL USING (auth.role() = 'authenticated');

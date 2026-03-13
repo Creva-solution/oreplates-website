@@ -219,30 +219,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Google Translate Initialization
 function googleTranslateElementInit() {
-    // Ensure the container exists
-    let container = document.getElementById('google_translate_element');
-    if (!container) {
-        container = document.createElement('div');
-        container.id = 'google_translate_element';
-        container.style.display = 'none';
-        document.body.appendChild(container);
-    }
-
     new google.translate.TranslateElement({
         pageLanguage: 'en',
         includedLanguages: 'ta,en',
         layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-        autoDisplay: true // Changed to true to help it catch the cookie
+        autoDisplay: true
     }, 'google_translate_element');
+
+    // Special check for immediate trigger on init
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang && savedLang !== 'en') {
+        const checkExist = setInterval(() => {
+            const combo = document.querySelector('.goog-te-combo');
+            if (combo) {
+                combo.value = savedLang;
+                combo.dispatchEvent(new Event('change', { bubbles: true }));
+                clearInterval(checkExist);
+            }
+        }, 200);
+        setTimeout(() => clearInterval(checkExist), 5000);
+    }
 }
 
 // Global script to load Google Translate
 (function() {
-    if (!document.querySelector('script[src*="translate.google.com"]')) {
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.async = true;
-        script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
-        document.head.appendChild(script);
+    // 1. Create the container div immediately if it doesn't exist
+    if (!document.getElementById('google_translate_element')) {
+        const div = document.createElement('div');
+        div.id = 'google_translate_element';
+        div.style.display = 'none';
+        div.style.position = 'fixed';
+        div.style.bottom = '0';
+        div.style.left = '0';
+        div.style.zIndex = '-1000';
+        document.body.appendChild(div);
     }
+
+    // 2. Clear old scripts to prevent conflicts during re-runs
+    document.querySelectorAll('script[src*="translate.google.com"]').forEach(s => s.remove());
+
+    // 3. Dynamic Load
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+    script.async = true;
+    
+    // Add error handling for local files
+    script.onerror = () => {
+        console.warn('Google Translate failed to load. This usually happens on local "file:///" protocols. Please use a local server (Live Server) for full functionality.');
+    };
+    
+    document.head.appendChild(script);
 })();
