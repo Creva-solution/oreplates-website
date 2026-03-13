@@ -1,4 +1,4 @@
-// Language Translation Trigger using Cookies
+// Language Translation Trigger using Cookies and Hash
 function translatePage(langCode) {
     // 1. Set Google Translate Cookie aggressively
     const host = window.location.hostname;
@@ -20,10 +20,13 @@ function translatePage(langCode) {
     // 2. Save Preference locally
     localStorage.setItem('preferredLanguage', langCode);
     
-    // 3. Immediately update UI for feedback
+    // 3. Update Hash for Google Translate fallback
+    window.location.hash = `#googtrans(en|${langCode})`;
+    
+    // 4. Update UI
     updateLangUI(langCode);
 
-    // 4. Reload page WITH a URL parameter to force it in case cookies fail (especially on local/unsecured sites)
+    // 5. Reload page WITH a URL parameter to force it
     const url = new URL(window.location.href);
     url.searchParams.set('lang', langCode);
     window.location.href = url.toString();
@@ -31,6 +34,7 @@ function translatePage(langCode) {
 
 function updateLangUI(langCode) {
     document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.add('notranslate'); // Prevent Google from translating the buttons
         const text = btn.textContent.trim().toUpperCase();
         if (langCode === 'en' && (text.includes('ENGLISH') || text === 'EN')) {
             btn.classList.add('active');
@@ -46,10 +50,13 @@ function updateLangUI(langCode) {
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URL(window.location.href).searchParams;
     const urlLang = urlParams.get('lang');
-    const savedLang = urlLang || localStorage.getItem('preferredLanguage') || 'en';
+    // Check hash as well
+    const hashLang = window.location.hash.includes('ta') ? 'ta' : (window.location.hash.includes('en') ? 'en' : null);
     
-    if (urlLang) {
-        localStorage.setItem('preferredLanguage', urlLang);
+    const savedLang = urlLang || hashLang || localStorage.getItem('preferredLanguage') || 'en';
+    
+    if (urlLang || hashLang) {
+        localStorage.setItem('preferredLanguage', urlLang || hashLang);
     }
 
     updateLangUI(savedLang);
@@ -61,12 +68,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (combo) {
                 if (combo.value !== savedLang) {
                     combo.value = savedLang;
-                    combo.dispatchEvent(new Event('change'));
+                    combo.dispatchEvent(new Event('change', { bubbles: true }));
+                    combo.dispatchEvent(new Event('click', { bubbles: true }));
                 }
                 clearInterval(interval);
             }
-        }, 300);
-        setTimeout(() => clearInterval(interval), 10000); // 10s polling for slow connections
+        }, 500);
+        setTimeout(() => clearInterval(interval), 15000); // 15s extended polling
     }
 });
 
