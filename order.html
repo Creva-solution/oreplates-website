@@ -156,8 +156,16 @@
                         <span id="display-unit-price">₹0.00</span>
                     </div>
                     <div class="summary-row">
+                        <span>Plates per Pack</span>
+                        <span id="display-plates-count">0</span>
+                    </div>
+                    <div class="summary-row">
                         <span>Number of Packs</span>
                         <span id="display-qty">x 1</span>
+                    </div>
+                    <div class="summary-row" style="border-top: 1px solid #e2e8f0; margin-top: 5px; padding-top: 5px;">
+                        <span>Total Plates</span>
+                        <span id="display-total-plates" style="font-weight: 700; color: var(--text);">0</span>
                     </div>
                     <div class="summary-row total">
                         <span style="font-size: 1.1rem;">Total Price</span>
@@ -224,16 +232,19 @@
         const productName = urlParams.get('product') || 'Selected Product';
         const productSize = urlParams.get('size') || '10 Inch';
         const productPrice = urlParams.get('price') || '12.00';
+        const plateCount = urlParams.get('pack') || '0';
 
         // Set Initial Values
         const pNameField = document.getElementById('p-name');
         const pPriceField = document.getElementById('p-price');
         const pSizeField = document.getElementById('p-size');
         const pQtyField = document.getElementById('p-qty');
+        const displayPlatesCount = document.getElementById('display-plates-count');
 
         if(pNameField) pNameField.value = productName;
         if(pPriceField) pPriceField.value = `${productPrice}`;
         if(pSizeField) pSizeField.value = productSize;
+        if(displayPlatesCount) displayPlatesCount.innerText = plateCount;
 
         const displayUnitPrice = document.getElementById('display-unit-price');
         const displayQty = document.getElementById('display-qty');
@@ -242,11 +253,15 @@
         function updateSummary() {
             const price = parseFloat(pPriceField.value) || 0;
             const qty = parseInt(pQtyField.value) || 0;
+            const platesPerPack = parseInt(plateCount) || 0;
+            const totalPlates = qty * platesPerPack;
             const total = (price * qty).toFixed(2);
 
             if(displayUnitPrice) displayUnitPrice.innerText = `₹${price.toFixed(2)}`;
             if(displayQty) displayQty.innerText = `x ${qty}`;
             if(displayTotal) displayTotal.innerText = `₹${total}`;
+            const displayTotalPlatesCount = document.getElementById('display-total-plates');
+            if(displayTotalPlatesCount) displayTotalPlatesCount.innerText = totalPlates;
         }
 
         if(pQtyField) {
@@ -275,8 +290,10 @@
                 `--------------------------\n` +
                 `*Product:* ${prod}\n` +
                 `*Size:* ${size}\n` +
+                `*Pack:* ${plateCount} Plates\n` +
                 `*Price per Pack:* ₹${price}\n` +
                 `*Number of Packs:* ${qty}\n` +
+                `*Total Plates Buying:* ${parseInt(qty) * parseInt(plateCount)}\n` +
                 `*Total Price:* ₹${total}\n\n` +
                 `*Customer Info*\n` +
                 `--------------------------\n` +
