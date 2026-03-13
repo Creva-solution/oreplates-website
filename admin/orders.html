@@ -22,17 +22,30 @@
         .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; padding: 2rem; overflow-y: auto; }
         .modal-body { background: white; width: 800px; max-width: 100%; border-radius: 16px; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
         
-        /* ... existing invoice styles ... */
+        /* Invoice Styling */
+        #invoice-print-area { padding: 40px; background: white; color: #1a202c; font-family: 'Inter', sans-serif; }
+        .inv-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 30px; }
+        .inv-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px; }
+        .inv-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-bottom: 10px; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        .inv-table th { background: #f8fafc; color: #64748b; font-size: 0.85rem; padding: 12px 15px; border-bottom: 1px solid #e2e8f0; }
+        .inv-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
+        .inv-summary { margin-left: auto; width: 300px; background: #f8fafc; padding: 20px; border-radius: 12px; }
+        .inv-summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
+        .inv-summary-row.inv-total { border-top: 1px solid #e2e8f0; margin-top: 15px; padding-top: 15px; font-weight: 800; color: var(--primary); font-size: 1.25rem; }
+        .inv-footer { margin-top: 50px; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 20px; }
+        .eco-note { color: var(--primary); font-weight: 600; margin-top: 10px; }
+
         @media (max-width: 768px) {
-            .inv-header { flex-direction: column; text-align: left; }
+            .inv-header { flex-direction: column; text-align: left; align-items: flex-start; }
             .inv-company-info { text-align: left; margin-top: 1rem; }
-            .inv-details-grid { grid-template-columns: 1fr; }
+            .inv-details-grid { grid-template-columns: 1fr; gap: 20px; }
             .inv-summary { width: 100%; }
         }
         
         /* Fixed Desktop Layout for Image Generation */
-        .desktop-invoice-mode { width: 1000px !important; min-width: 1000px !important; margin: 0 !important; }
-        .desktop-invoice-mode .inv-header { flex-direction: row !important; text-align: left !important; }
+        .desktop-invoice-mode { width: 800px !important; min-width: 800px !important; margin: 0 auto !important; }
+        .desktop-invoice-mode .inv-header { flex-direction: row !important; text-align: left !important; align-items: center !important; }
         .desktop-invoice-mode #inv-company-details { text-align: right !important; margin-top: 0 !important; }
     </style>
 </head>
