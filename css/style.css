@@ -774,60 +774,89 @@ footer {
 }
 
 .testimonial-card-small {
-    width: 380px;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 24px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    padding: 2.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    transition: var(--transition);
+}
+
+.testimonial-card-small:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-10px);
+    border-color: var(--primary-light);
 }
 
 .testimonial-card-small .quote {
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 1.05rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    font-style: italic;
 }
 
 .testimonial-card-small .author-info {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
+}
+
+.testimonial-card-small .avatar-cont {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
 }
 
 .testimonial-card-small .avatar-circle {
-    width: 45px;
-    height: 45px;
+    width: 100%;
+    height: 100%;
     background: linear-gradient(135deg, var(--primary), var(--primary-light));
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.testimonial-card-small img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary-light);
 }
 
 .testimonial-card-small .meta h4 {
     color: white;
-    font-size: 1rem;
-    margin-bottom: 0.1rem;
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+    font-weight: 600;
 }
 
 .testimonial-card-small .meta p {
     color: rgba(255, 255, 255, 0.5);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+    font-weight: 500;
 }
 
 @media (max-width: 768px) {
     .testimonial-card-small {
-        width: 300px;
-        padding: 1.5rem;
+        width: 320px;
+        padding: 2rem;
+    }
+    .testimonial-card-small .avatar-cont {
+        width: 50px;
+        height: 50px;
     }
 }
 

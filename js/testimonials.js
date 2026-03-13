@@ -21,15 +21,17 @@ async function loadTestimonials() {
         // Generate Cards
         const cardsHTML = testimonials.map(t => {
             const initials = t.name ? t.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : '??';
-            const avatarContent = t.avatar_url 
-                ? `<img src="${t.avatar_url}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+            const avatarHTML = t.avatar_url 
+                ? `<img src="${t.avatar_url}" alt="${t.name}">`
                 : `<div class="avatar-circle">${initials}</div>`;
                 
             return `
                 <div class="testimonial-card-small">
                     <p class="quote">"${t.review || ''}"</p>
                     <div class="author-info">
-                        ${avatarContent}
+                        <div class="avatar-cont">
+                            ${avatarHTML}
+                        </div>
                         <div class="meta">
                             <h4>${t.name || 'Anonymous'}</h4>
                             <p>${t.title || 'Customer'}</p>

@@ -46,4 +46,4 @@ DROP POLICY IF EXISTS "Public can view testimonials" ON public.testimonials;
 CREATE POLICY "Public can view testimonials" ON public.testimonials FOR SELECT USING (true);
 
 DROP POLICY IF EXISTS "Admins can manage testimonials" ON public.testimonials;
-CREATE POLICY "Admins can manage testimonials" ON public.testimonials ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admins can manage testimonials" ON public.testimonials FOR ALL USING (auth.role() = 'authenticated');
