@@ -281,11 +281,17 @@
             orderBtn.disabled = true;
             orderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
             
-            const prod = pNameField.value;
+            const prodBase = pNameField.value;
             const size = pSizeField.value;
             const qty = pQtyField.value;
             const price = pPriceField.value;
             const total = (parseFloat(price) * parseInt(qty)).toFixed(2);
+            
+            // Clean Product Name (Avoid redundant size or empty brackets)
+            let finalProdName = prodBase;
+            if (size && !prodBase.toLowerCase().includes(size.toLowerCase())) {
+                finalProdName = `${prodBase} (${size})`;
+            }
             
             const name = document.getElementById('c-name').value;
             const phone = document.getElementById('c-phone').value;
@@ -300,7 +306,7 @@
                 const { error: dbError } = await window.supabaseInstance
                     .from('orders')
                     .insert([{
-                        product_name: `${prod} (${size})`,
+                        product_name: finalProdName,
                         quantity: parseInt(qty),
                         unit_price: parseFloat(price),
                         total_amount: parseFloat(total),
@@ -317,8 +323,8 @@
                     `Hello Oreplates,\n\n` +
                     `*NEW ORDER DETAILS*\n` +
                     `--------------------------\n` +
-                    `*Product:* ${prod}\n` +
-                    `*Size:* ${size}\n` +
+                    `*Product:* ${finalProdName}\n` +
+                    `*Size:* ${size || 'N/A'}\n` +
                     `*Items per Pack:* ${plateCount} Plates\n` +
                     `*Price per Pack:* ₹${price}\n` +
                     `*Number of Packs:* ${qty}\n` +

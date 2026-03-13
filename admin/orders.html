@@ -23,18 +23,18 @@
         .modal-body { background: white; width: 800px; max-width: 100%; border-radius: 16px; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
         
         /* Invoice Styling */
-        #invoice-print-area { padding: 40px; background: white; color: #1a202c; font-family: 'Inter', sans-serif; }
-        .inv-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 30px; }
-        .inv-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px; }
-        .inv-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; margin-bottom: 10px; }
-        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
-        .inv-table th { background: #f8fafc; color: #64748b; font-size: 0.85rem; padding: 12px 15px; border-bottom: 1px solid #e2e8f0; }
-        .inv-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; }
-        .inv-summary { margin-left: auto; width: 300px; background: #f8fafc; padding: 20px; border-radius: 12px; }
-        .inv-summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
-        .inv-summary-row.inv-total { border-top: 1px solid #e2e8f0; margin-top: 15px; padding-top: 15px; font-weight: 800; color: var(--primary); font-size: 1.25rem; }
-        .inv-footer { margin-top: 50px; text-align: center; border-top: 1px solid #f1f5f9; padding-top: 20px; }
-        .eco-note { color: var(--primary); font-weight: 600; margin-top: 10px; }
+        #invoice-print-area { padding: 50px; background: white; color: #1e293b; font-family: 'Inter', sans-serif; }
+        .inv-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; padding-bottom: 30px; margin-bottom: 40px; }
+        .inv-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; margin-bottom: 40px; }
+        .inv-section-title { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 1.5px; margin-bottom: 12px; display: block; }
+        .inv-table { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        .inv-table th { background: #f8fafc; color: #475569; font-size: 0.8rem; padding: 15px 20px; border-bottom: 2px solid #e2e8f0; text-align: left; text-transform: uppercase; letter-spacing: 0.5px; }
+        .inv-table td { padding: 20px; border-bottom: 1px solid #f1f5f9; font-size: 1rem; color: #334155; }
+        .inv-summary { margin-left: auto; width: 320px; background: #f8fafc; padding: 25px; border-radius: 16px; border: 1px solid #f1f5f9; }
+        .inv-summary-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 1rem; }
+        .inv-summary-row.inv-total { border-top: 2px dashed #e2e8f0; margin-top: 20px; padding-top: 20px; font-weight: 900; color: var(--primary); font-size: 1.4rem; }
+        .inv-footer { margin-top: 60px; text-align: center; border-top: 2px solid #f1f5f9; padding-top: 30px; }
+        .eco-note { color: var(--primary); font-weight: 700; margin-top: 15px; font-size: 1.1rem; }
 
         @media (max-width: 768px) {
             .inv-header { flex-direction: column; text-align: left; align-items: flex-start; }
